@@ -87,7 +87,7 @@ window.initApp = async () => {
         myAccount = account.address;
 
         console.log('myAccount' , myAccountAdr );
-        document.getElementById("key2adr").innerText = myAccountAdr;
+        document.getElementById("key2adr").innerText = myAccount;
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
     
