@@ -83,10 +83,9 @@ window.initApp = async () => {
         account = web3.eth.accounts.privateKeyToAccount(privateKey);
         console.log(account)
         // JSONを再びオブジェクトデータの形式に変換
-        myAccountAdr = account.address;
         myAccount = account.address;
 
-        console.log('myAccount' , myAccountAdr );
+        console.log('myAccount' , myAccount );
         document.getElementById("key2adr").innerText = myAccount;
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
