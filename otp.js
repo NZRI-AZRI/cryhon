@@ -77,8 +77,9 @@ window.clipBoardWrite = async (docIdText) => {
 /*private key only.*/
 //init　web3 初期化
 window.initApp = async () => {
-
-        // privateKeyをインポート
+        //wssプロバイダセット
+        web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
+        // privateKeyをインポート・セット
         account = web3.eth.accounts.privateKeyToAccount(privateKey);
         console.log(account)
         // JSONを再びオブジェクトデータの形式に変換
@@ -104,13 +105,8 @@ window.addEventListener('load', async function() {
     if (!web3prov){
         return window.alert("web3prov is empty")
     }
-    
     //初期化
     initApp();
-
-    //wssプロバイダセット
-    web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
-
     /*
     //httpはweb3 公式では非推奨、wssを利用
       //wssプロバイダセット
