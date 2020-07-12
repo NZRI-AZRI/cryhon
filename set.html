@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <!-- icon -->
+
+    
+    <title>Crypto-bon setting</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- web3 js -->
+    <script type="text/javascript" src="./web3.min.js"></script>
+    <!--QR code write -->
+    <script type="text/javascript" src="./qrcode.min.js"></script>
+
+
+    <style type="text/css">
+        .box4{
+        padding: 8px 19px;
+        margin: 2em 0;
+        color: #2c2c2f;
+        background: #cde4ff;
+        border-top: solid 5px #5989cf;
+        border-bottom: solid 5px #5989cf;
+        }
+        .box4 p {
+            margin: 0; 
+            padding: 0;
+        }
+        .box7{
+        padding: 0.5em 1em;
+        margin: 2em 0;
+        color: #232323;
+        background: #fff8e8;
+        border-left: solid 10px #6efff3;
+        }
+        .box7 p {
+            margin: 0; 
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--設定入力-->
+<div class="box4">
+    <h1>設定画面です</h1><br>
+    <h2>コンテンツ閲覧のため、以下項目を設定してください。 </h2>
+    
+    <div>
+        <h1>秘密鍵とweb3プロバイダアドレスを設定し保存します</h1><br>
+        <!-- init App (use PrivateKey,web3ProviderURI)-->
+        <h2>Set PrivateKey,web3ProviderURI.</h2>
+        <span>
+        <div class="box7">
+        <!-- 入力　-->
+            <p>入力欄にあなたの利用するweb3 プロバイダアドレスを入力 --->:
+                <input type="text"  name="web3prov1" id="web3prov1" style="width:200px">
+            </p>
+            <p>・入力欄にあなたの秘密鍵を0x形式で入力(Input private-key) --->:
+                <input type="password"  name="privateKey1" id="privateKey1" style="width:200px">
+            </p>
+                <p>・入力したらボタンをクリック(Click button to save private-key and web3-provider-URI)</p><br>
+                <button onclick="setKey()"> 秘密鍵keyとWeb3プロバイダを保存</button>
+        </div>
+        <p>web3プロバイダアドレスの例：'wss://mainnet.infura.io/ws/v3/39a7b8b9d7924f8398xxxxxxxxxxxxab'</p>
+        <p>WebsocketProvider使用。</p>
+        <p>秘密鍵とweb3プロバイダアドレスはNode.js-ElectronのChromiumブラウザのsessionStrageに一時保存されます。</p>
+        </span>
+        <br><br><br>
+    </div>
+
+<!--ワンタイムパスワード認証画面に遷移-->
+<div class="box4">
+    <h1></h1><br>
+    <h2>設定ボタンを押した後、以下のボタンで次に進みます。 </h2>
+    <span>
+        <div class="box7">
+            <button onclick="gotoOtp()"> 次のページに進む</button>
+        </div>
+    </span>
+<!--メインスクリプト -->
+<script type="text/javascript" src="./set.js"></script>
+
+<!--footer-->
+<footer>Author NZRI (https://github.com/NZRI-AZRI)</footer>
+
+</body>
+
+</html>
+
+<!--
+/*
+{
+  "name": "Crypto-bon(Crybon)",
+  "version": "1.0.0",
+  "description": "Local app of [web3-otp-contents-viewer]",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["web3","otp","contents","viewer"],
+  "author": {
+    "name": "Katusya Nishizawa",
+    "email": "nzri2azri@gmail.com",
+    "url": "https://github.com/NZRI-AZRI"
+  },
+  "license": "UNLICENSED"
+}
+*/
+-->
