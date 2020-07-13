@@ -9,7 +9,7 @@ GitLab ver is https://gitlab.com/katsuya_nishizawa/cryhon-crybon.
 BON or HON mean book(本) in japanese.
 
 Licence is UNLICENSE.(not MIT)
-code will be open. 
+code will be open-source-software. 
 I can use this app , sytem. (at 2020/07/13)
 
 Make flow is ... [node.js  --> Electron --> electron-builder-->Make 1 app file including Javascript-Html-Css-pdf-mp3-mp4-etc.. ---> 1 File such type are " exe-dmg-app ".]
