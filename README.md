@@ -3,6 +3,9 @@ crypto-bon-ozotp
 CRYBON or CRYHON is ethereum-web3 based one time passward login and contens viewer app.
 In this text, otp is one time passward .
 
+GitLab ver is https://gitlab.com/katsuya_nishizawa/cryhon-crybon.
+
+
 BON or HON mean book(本) in japanese.
 
 Licence is UNLICENSE.(not MIT)
