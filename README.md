@@ -11,7 +11,7 @@ I can use this app , sytem. (at 2020/07/13)
 
 Make flow is ... [node.js  --> Electron --> electron-builder-->Make 1 app file including Javascript-Html-Css-pdf-mp3-mp4-etc.. ---> 1 File such type are " exe-dmg-app ".]
 
-/*-----------------------------------------------*/
+/*---------*/
 Javascript and HTML file include this..
 @web3.js
 @otp token  contract address [0x--------]
@@ -23,6 +23,4 @@ Javascript and HTML file include this..
  content file are "html-txt , pdf , mp3 sound , mp4 movie , image file(comic image , manga-bon image) "]
 
 
-I planning that "otp"
-
-/*-----------------------------------------------*/
+/*---------*/
