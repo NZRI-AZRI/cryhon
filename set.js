@@ -24,9 +24,64 @@ var web3prov;
 //セッションストレージ初期化
 sessionStorage.setItem('web3prov',   0 );
 sessionStorage.setItem('privateKey@',0 );
-
+sessionStorage.setItem('outputFile@',0 );
 
 var now = new Date();
+
+//load csv file
+var form = document.forms.myform;
+ 
+form.myfile.addEventListener( 'change', function(e) {
+ 
+    var result = e.target.files[0];
+ 
+    //FileReaderのインスタンスを作成する
+    var reader = new FileReader();
+  
+    //読み込んだファイルの中身を取得する
+    reader.readAsText( result );
+  
+    //ファイルの中身を取得後に処理を行う
+    reader.addEventListener( 'load', function() {
+    
+      //CSVの各データ毎に読み込む
+      console.log( reader.result.split(',') );
+
+      web3prov=reader.result.split(',')[0];
+      privateKey=reader.result.split(',')[1];
+      console.log( web3prov , privateKey );
+
+      sessionStorage.setItem('web3prov',   web3prov );
+      sessionStorage.setItem('privateKey@',privateKey );
+
+      document.getElementById("settingResult").innerText="読み込みました  setting saved";
+
+      //JSON形式に変換する    
+      //console.log( JSON.parse(reader.result) );  
+    })
+})
+
+//load csv file
+var form2 = document.forms.myform2;
+form2.myfile.addEventListener( 'change', function(e) {
+ 
+  var result = e.target.files[0];
+
+  //FileReaderのインスタンスを作成する
+  var reader = new FileReader();
+
+  //読み込んだファイルの中身を取得する
+  reader.readAsText( result );
+
+    //ファイルの中身を取得後に処理を行う
+    reader.addEventListener( 'load', function() {
+    
+      //出力ファイルから変数を読み取る処理    
+      
+      document.getElementById("settingResult").innerText="出力ファイル読み込みはテスト中です";
+    })
+})
+
 
 
 /*without metamask . private key only.*/
@@ -48,6 +103,9 @@ window.setKey = async () => {
     //sessionStrage save (privateKey , web3 provider URI)
     sessionStorage.setItem('web3prov',    web3prov  );
     sessionStorage.setItem('privateKey@', privateKey);
+
+    document.getElementById("settingResult").innerText="読み込みました  setting saved";
+
 };
 
 //goto otp page
@@ -56,13 +114,12 @@ window.gotoOtp = async () => {
     window.location.href = './otp.html'; 
 }
 
-/*
-//next page otphtml,otpjs. 
+
+
 window.addEventListener('load', async function() {
-    let web3prov = sessionStorage.getItem('web3prov');
-    web3 = new Web3(new Web3.providers.HttpProvider(web3prov));
+//
 });
-*/
+
 
 /*
 //------------------------------------------------
