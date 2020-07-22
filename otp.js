@@ -181,9 +181,8 @@ window.autoLoginBy7num = async () => {
 	}
 }
 
-/** 
- * otp getter setter 
-*/
+/*
+
 //getYourOTP   Only Owner can cahnge all OTP. 
 window.getOtp = async () => {
 
@@ -375,6 +374,8 @@ window.getOtp = async () => {
       }
   }
 
+
+  */
 
 
 
