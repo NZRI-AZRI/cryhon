@@ -30,9 +30,9 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 
 
 
-var ethers;//instance of ethers.js
-var provider;//ether js provider
-var signer ;//ether js signer
+
+//var provider;//ether js provider
+//var signer ;//ether js signer
 
 let account ;//coinbase
 let myAccount;//eth address
@@ -57,16 +57,20 @@ sessionStorage.setItem('myAccount', 0 );
 
 var now = new Date();
 
-/*private key only.*/
-//init　web3 初期化
-window.initApp = async () => {
-
 
 // A Web3Provider wraps a standard Web3 provider, which is
 // what Metamask injects as window.ethereum into each page
-provider = new ethers.providers.Web3Provider(window.ethereum);
+const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+// The Metamask plugin also allows signing transactions to
+// send ether and pay to change state within the blockchain.
+// For this, we need the account signer...
+const signer = provider.getSigner()
 
 
+/*private key only.*/
+//init　初期化
+window.initApp = async () => {
 
         /*
           //wssプロバイダセット
@@ -87,11 +91,7 @@ provider = new ethers.providers.Web3Provider(window.ethereum);
         //ethers.provider.WebSocketProvider---> If url is unspecified, the default "ws://localhost:8546" will be used. If network is unspecified, it will be queried from the network.
 
 
-// The Metamask plugin also allows signing transactions to
-// send ether and pay to change state within the blockchain.
-// For this, we need the account signer...
-signer = provider.getSigner();
-console.log(signer);        
+    
 
         /*        
         //siner
@@ -102,9 +102,6 @@ console.log(signer);
         console.log(wallet);
         console.log(wallet.mnemonic); //display mnemonic
         */        
-       wallet = signer;//provider connected wallet , unlocked private key.
-       console.log(wallet);
-       console.log(wallet.address); //display mnemonic
        
         /*
         // Create a wallet instance from a mnemonic...
