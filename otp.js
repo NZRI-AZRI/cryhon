@@ -116,7 +116,7 @@ window.initApp = async () => {
         console.log('myAccount' , signer.getAddress() );
         //console.log('public-key' , wallet.publicKey );
 
-        document.getElementById("key2adr").innerText = wallet.address;
+        document.getElementById("key2adr").innerText = signer.getAddress();
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
     
@@ -143,6 +143,7 @@ window.initApp = async () => {
 
 //load
 window.addEventListener('load', async function() {
+/*
     //key prov が設定されているか？
     if (!privateKey){
         return window.alert("key is empty")
@@ -150,6 +151,7 @@ window.addEventListener('load', async function() {
     if (!prov){
         return window.alert("prov is empty")
     }
+*/
     //初期化
     initApp();
 });
@@ -166,13 +168,13 @@ window.autoLoginBy7num = async () => {
 
 	let authResult = false ;
 
-	authResult =  await authInstance.authTotpRn7Num(wallet.address, nftid, otp7num);
+	authResult =  await authInstance.authTotpRn7Num(signer.getAddress(), nftid, otp7num);
 	console.log('auth Result is ', authResult);
 
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
-		sessionStorage.setItem('myAccount', wallet.address );
+		sessionStorage.setItem('myAccount', signer.getAddress() );
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
 		return false;	
@@ -197,7 +199,7 @@ window.getOtp = async () => {
     let resOtp = await geneInstance.getConstOtp(nftIdGetOtp);
   
     document.getElementById("showGetYourOTP1").innerText = resOtp;
-    document.getElementById("youraddress11").innerText = myAccount;
+    document.getElementById("youraddress11").innerText = signer.getAddress();
   
     //contract name , contract address
     let conName =  await geneInstance.name();
@@ -237,7 +239,7 @@ window.getOtp = async () => {
       let el = document.getElementById('qrcode1');
       
       //let text1 = 'BNOTP:'+myAccount+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
-      let text1 = myAccount+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
+      let text1 = signer.getAddress()+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
       
       console.log(text1);
       
@@ -267,7 +269,7 @@ window.getOtp = async () => {
     
     let authResult = false ;
   
-    authResult =  await authInstance.authConstOtp(myAccount, nftid2auth, otp2auth);
+    authResult =  await authInstance.authConstOtp(signer.getAddress(), nftid2auth, otp2auth);
     console.log('auth Result is ', authResult);
   
     document.getElementById("showAuthResult1").innerText = authResult;
@@ -279,7 +281,7 @@ window.getOtp = async () => {
           //sessionStorage.setItem('key', 'value');
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
-          sessionStorage.setItem('myAccount', myAccount );
+          sessionStorage.setItem('myAccount', signer.getAddress() );
   
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -328,7 +330,7 @@ window.getOtp = async () => {
     console.log("block-time-stamp",provider.block.timestamp);
 
       document.getElementById("showGetYourOTP3").innerText = result2;
-      document.getElementById("youraddress13").innerText = myAccount;
+      document.getElementById("youraddress13").innerText = signer.getAddress();
     
       //contract name
       let result11 =  await geneInstance.name();
@@ -337,7 +339,7 @@ window.getOtp = async () => {
       //QR code totp   text2はアドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
       //ETHアドレス、tokenId、totpOtpCode、ブロックナンバー、現在のブロック時間、台帳ネットワークID、ユーザーIPアドレス
       let el = document.getElementById('qrcode3');
-      let text2 = myAccount + '-' + nftidtoknowotp + '-' + result2 + '-'+ bn +'-' + netId + '-' + nowUnixTime ; 
+      let text2 = signer.getAddress() + '-' + nftidtoknowotp + '-' + result2 + '-'+ bn +'-' + netId + '-' + nowUnixTime ; 
       console.log(text2);
       document.getElementById("qrcode3time").innerText = 'QRコードを表示しました。' + bn ;
       if (qrcodeCount3 < 1){
@@ -360,13 +362,13 @@ window.getOtp = async () => {
         return window.alert("otp is empty")
       }
       let authResult = false ;
-      authResult =  await authInstance.authTotpRn7Num(myAccount, nftid2auth, otp2auth);
+      authResult =  await authInstance.authTotpRn7Num(signer.getAddress(), nftid2auth, otp2auth);
       console.log('auth Result is ', authResult);
       document.getElementById("showAuthResult3").innerText = authResult;
       if (authResult == true) {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
-          sessionStorage.setItem('myAccount', myAccount );
+          sessionStorage.setItem('myAccount', signer.getAddress() );
           //ページ遷移
           window.location.href = './book/bon.html'; 
           return false;	
