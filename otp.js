@@ -72,6 +72,7 @@ const signer = provider.getSigner()
 //init　初期化
 window.initApp = async () => {
 
+  signer.connect( provider );
         /*
           //wssプロバイダセット
           //provider =  ethers.WebSocketProvider(prov);
