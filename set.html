@@ -9,10 +9,17 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- web3 js -->
+    <!-- web3 js (LGPL-3.0のため、コンテンツ含む単一実行ファイルのソースコードを公開しなければいけないができないので廃止予定)    -->
     <script type="text/javascript" src="./web3.min.js"></script>
-    <!--QR code write -->
+
+    <!--Ethers js (MIT　こちらを採用する。)-->
+    <script type="text/javascript" src="./ethers-5.0.umd.min.js" ></script>
+    
+    <!--QR code write (MIT) -->
     <script type="text/javascript" src="./qrcode.min.js"></script>
+
+    <!--cypto js (MIT)-->
+
 
 
     <style type="text/css">
@@ -56,7 +63,7 @@
 
         <!-- 入力　-->
             <p>入力欄にあなたの利用するweb3 プロバイダアドレスを入力 --->:
-                <input type="text"  name="web3prov1" id="web3prov1" style="width:200px">
+                <input type="text"  name="prov1" id="prov1" style="width:200px">
             </p>
             <p>・入力欄にあなたの秘密鍵を0x形式で入力(Input private-key) --->:
                 <input type="password"  name="privateKey1" id="privateKey1" style="width:200px">
@@ -82,14 +89,23 @@
             なお、秘密鍵と出力ファイルは対にならないと動作しない。
             もし本を誰かに読ませるならば秘密鍵と出力ファイルを渡さないといけないが、それはアカウントの譲渡に当たる。
             誰がカギを意図的に紛失させたかがわかるのでユーザーは鍵を不当に流すことはしたくないハズ。
-        
         -->
+
+        <!--
+            １．ユーザーの秘密鍵を入力とする。
+            ２．秘密鍵から公開鍵を算出し、公開鍵で、認証時のアプリ内部の共通鍵もしくは共通データとブロック番号、タイムスタンプなどをRSA暗号化。
+            ３．暗号化したファイルを、閲覧時の栞データ、ここえは”公開栞”データと呼称して出力する。なお栞には読者コメントなども含めていい。
+            ４．オフチェーン、オフラインにおいてもアプリシャットダウン時間に制約があるものの、秘密鍵と公開栞があれば閲覧できるようにする。
+
+        -->
+
+
         <form name="myform2">
             load json :
             <input name="myfile2" type="file" id="input2" accept=".csv"/>
         </form>
         <br>
-        <p>web3プロバイダアドレスの例：'wss://mainnet.infura.io/ws/v3/39a7b8b9d7924f8398xxxxxxxxxxxxab'</p>
+        <p>プロバイダアドレスの例：'wss://mainnet.infura.io/ws/v3/39a7b8b9d7924f8398xxxxxxxxxxxxab'</p>
         <p>WebsocketProvider使用。</p>
         <p>秘密鍵とweb3プロバイダアドレスはNode.js-ElectronのChromiumブラウザのsessionStrageに一時保存されます。</p>
         </span>

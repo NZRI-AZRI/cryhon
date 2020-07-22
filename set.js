@@ -1,13 +1,13 @@
 /*
 {
   "name": "Crypto-bon(Crybon)",
-  "version": "1.0.0",
-  "description": "Local app of [web3-otp-contents-viewer]",
+  "version": "1.0.1",
+  "description": "Local app of [web3-etherjs-otp-contents-viewer]",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["web3","otp","contents","viewer"],
+  "keywords": ["ether","otp","contents","viewer"],
   "author": {
     "name": "Katusya Nishizawa",
     "email": "nzri2azri@gmail.com",
@@ -17,18 +17,29 @@
 }wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab
 */
 
+/*
+https://qiita.com/hm0429/items/082ad6ef5749e984d904  
+
+new ethers.provider.WebSocketProvider( [ url [ , network ] ] );
+new ethers.providers.JsonRpcProvider( [ url [ , aNetworkish ] ] );
+*/
+
+
+
+
 //宣言
 let privateKey;
-var web3prov;
+var prov;
 
 //セッションストレージ初期化
-sessionStorage.setItem('web3prov',   0 );
+sessionStorage.setItem('prov',       0 );
 sessionStorage.setItem('privateKey@',0 );
+sessionStorage.setItem('inputFile@' ,0 );
 sessionStorage.setItem('outputFile@',0 );
 
 var now = new Date();
 
-//load csv file
+//load csv inputfile (private key file and websocketURI)
 var form = document.forms.myform;
  
 form.myfile.addEventListener( 'change', function(e) {
@@ -51,7 +62,7 @@ form.myfile.addEventListener( 'change', function(e) {
       privateKey=reader.result.split(',')[1];
       console.log( web3prov , privateKey );
 
-      sessionStorage.setItem('web3prov',   web3prov );
+      sessionStorage.setItem('prov',   prov );
       sessionStorage.setItem('privateKey@',privateKey );
 
       document.getElementById("settingResult").innerText="読み込みました  setting saved";
@@ -61,7 +72,7 @@ form.myfile.addEventListener( 'change', function(e) {
     })
 })
 
-//load csv file
+//load output file (public bookmark file)
 var form2 = document.forms.myform2;
 form2.myfile.addEventListener( 'change', function(e) {
  
@@ -88,11 +99,11 @@ form2.myfile.addEventListener( 'change', function(e) {
 //set key and web3 provider
 window.setKey = async () => {
 
-    web3prov = document.getElementById("web3prov1").value;
+    web3prov = document.getElementById("prov1").value;
     if (!web3prov){
-            return window.alert("web3prov1 is empty")
+            return window.alert("prov1 is empty")
     }
-    console.log('web3 prov URI saved');
+    console.log('prov URI saved');
     
     privateKey = document.getElementById("privateKey1").value;
     if (!privateKey){
@@ -101,7 +112,7 @@ window.setKey = async () => {
     console.log('privateKey saved');
 
     //sessionStrage save (privateKey , web3 provider URI)
-    sessionStorage.setItem('web3prov',    web3prov  );
+    sessionStorage.setItem('prov',    prov  );
     sessionStorage.setItem('privateKey@', privateKey);
 
     document.getElementById("settingResult").innerText="読み込みました  setting saved";
@@ -125,6 +136,6 @@ window.addEventListener('load', async function() {
 //------------------------------------------------
 //Author
 //1.Code by NZRI. Katsuya Nishizawa.
-//2020-07-12
+//2020-07-23
 //------------------------------------------------
 */
