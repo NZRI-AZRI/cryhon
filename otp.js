@@ -58,13 +58,12 @@ sessionStorage.setItem('myAccount', 0 );
 
 var now = new Date();
 
-
 /*private key only.*/
 //init　web3 初期化
 window.initApp = async () => {
 
         //wssプロバイダセット
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        provider = ethers.providers.Web3Provider(window.ethereum);
         //const provider =  new ethers.provider.WebSocketProvider(prov);
         console.log(provider);
 
