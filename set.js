@@ -41,7 +41,6 @@ var now = new Date();
 
 //load csv inputfile (private key file and websocketURI)
 var form = document.forms.myform;
- 
 form.myfile.addEventListener( 'change', function(e) {
  
     var result = e.target.files[0];
@@ -58,7 +57,7 @@ form.myfile.addEventListener( 'change', function(e) {
       //CSVの各データ毎に読み込む
       console.log( reader.result.split(',') );
 
-      web3prov=reader.result.split(',')[0];
+      prov=reader.result.split(',')[0];
       privateKey=reader.result.split(',')[1];
       console.log( web3prov , privateKey );
 
@@ -74,24 +73,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
 //load output file (public bookmark file)
 var form2 = document.forms.myform2;
-form2.myfile.addEventListener( 'change', function(e) {
- 
-  var result = e.target.files[0];
 
-  //FileReaderのインスタンスを作成する
-  var reader = new FileReader();
-
-  //読み込んだファイルの中身を取得する
-  reader.readAsText( result );
-
-    //ファイルの中身を取得後に処理を行う
-    reader.addEventListener( 'load', function() {
-    
-      //出力ファイルから変数を読み取る処理    
-      
-      document.getElementById("settingResult").innerText="出力ファイル読み込みはテスト中です";
-    })
-})
 
 
 
@@ -99,8 +81,8 @@ form2.myfile.addEventListener( 'change', function(e) {
 //set key and web3 provider
 window.setKey = async () => {
 
-    web3prov = document.getElementById("prov1").value;
-    if (!web3prov){
+    prov = document.getElementById("prov1").value;
+    if (!prov){
             return window.alert("prov1 is empty")
     }
     console.log('prov URI saved');
