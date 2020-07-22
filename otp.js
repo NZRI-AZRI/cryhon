@@ -91,19 +91,21 @@ provider = new ethers.providers.Web3Provider(window.ethereum);
 // send ether and pay to change state within the blockchain.
 // For this, we need the account signer...
 signer = provider.getSigner();
-        
+console.log(signer);        
+
         /*        
         //siner
         signer = new ethers.Wallet( privateKey, provider );
         console.log(signer);
-        */
-
         //wallet----> ExternallyOwnedAccount and Signer の継承クラス。
-        wallet = new ethers.Wallet( privateKey, provider );//provider connected wallet , unlocked private key.
+        wallet = ethers.Wallet( privateKey, provider );//provider connected wallet , unlocked private key.
         console.log(wallet);
         console.log(wallet.mnemonic); //display mnemonic
-        
-        
+        */        
+       wallet = signer;//provider connected wallet , unlocked private key.
+       console.log(wallet);
+       console.log(wallet.address); //display mnemonic
+       
         /*
         // Create a wallet instance from a mnemonic...
         example from ethers-official-page...
@@ -114,8 +116,8 @@ signer = provider.getSigner();
 
 
         // JSONを再びオブジェクトデータの形式に変換
-        console.log('myAccount' , wallet.address );
-        console.log('public-key' , wallet.publicKey );
+        console.log('myAccount' , signer.getAddress() );
+        //console.log('public-key' , wallet.publicKey );
 
         document.getElementById("key2adr").innerText = wallet.address;
         document.getElementById("g-cont").innerText = geneContractAddress;
