@@ -64,8 +64,8 @@ var now = new Date();
 window.initApp = async () => {
 
         //wssプロバイダセット
-        new ethers.provider.WebSocketProvider(prov);
-        provider = ethers.provider.WebSocketProvider(prov);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        //const provider =  new ethers.provider.WebSocketProvider(prov);
         console.log(provider);
 
         /*
