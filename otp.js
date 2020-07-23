@@ -58,7 +58,6 @@ sessionStorage.setItem('myAccount', 0 );
 
 var now = new Date();
 
-provider = new EtherscanProvider(4);
 const providers = ethers.providers;
 const web3Provider = new providers.Web3Provider(web3.currentProvider, "rinkeby");
 const signer = web3Provider.getSigner();
