@@ -30,6 +30,7 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 
 
 
+import { ethers } from "./ethers-5.0.umd.min.js"
 
 //var provider;//ether js provider
 //var signer ;//ether js signer
@@ -58,17 +59,10 @@ sessionStorage.setItem('myAccount', 0 );
 var now = new Date();
 
 
-// A Web3Provider wraps a standard Web3 provider, which is
-// what Metamask injects as window.ethereum into each page
-let provider = new ethers.providers.Web3Provider(window.ethereum)
-
-// The Metamask plugin also allows signing transactions to
-// send ether and pay to change state within the blockchain.
-// For this, we need the account signer...
-let signer = provider.getSigner()
-
-signer.connect( provider );
-
+const providers = ethers.providers;
+const network = providers.networks['rinkeby'];
+const web3Provider = new providers.Web3Provider(web3.currentProvider, network);
+const signer = web3Provider.getSigner();
 
 
 /*private key only.*/
