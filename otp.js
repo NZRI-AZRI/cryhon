@@ -21,21 +21,21 @@
 /* 変数宣言初期化 */
 //sessionStrageから代入
 let privateKey= sessionStorage.getItem('privateKey@');
-let prov = sessionStorage.getItem('prov');
+let web3prov = sessionStorage.getItem('prov');
 
 //rinkeby contract
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
 const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 // ブロックチェーンにデプロイしたスマートコントラクトのアドレス 固定。
+//setページで記入させてもいいし、固定してバイナリ化して実行ファイル化してもいい。
+//setで変えられるときは汎用性は上がるが誤ったコントラクトアドレスを記入する恐れも出る。
+//仮に小説本を出すとすると、コントラクトアドレスは変わりないので以下の様に固定していいハズ。
+//もしコンテンツの定性をするなら実行ファイルのverを変えるかアプリとコントラクトアドレスごと変えてしまえばいい。
 
-
-
-//import { ethers } from "ethers";
-
-//var provider;//ether js provider
-//var signer ;//ether js signer
-
-
+let web3;
+let account ;//coinbase
+let myAccount;//eth address
+let wallet;
 
 var nonceCount; //nonnce (global var)
 var gasPri;
@@ -56,112 +56,71 @@ sessionStorage.setItem('myAccount', 0 );
 
 var now = new Date();
 
-//infra id
-const projectIdUri = "wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab";
-//use rinkeby ropsten...
-const provider = new ethers.provider.WebSocketProvider(projectIdUri);
 
-const signer = provider.getSigner();
-signer.connect(provider);
+//general function===================
+function copyPopUp(){
+	window.alert("コピーしました");
+}
 
-let account ;//coinbase
-let myAddress;//eth address
-
-// Create a wallet instance from a mnemonic... test.
-let mnemonic = "announce room limb pattern dry unit scale effort smooth jazz weasel alcohol";
-let walletMnemonic = Wallet.fromMnemonic(mnemonic);
-let wallet = walletMnemonic.connect(provider);
-signer.getAddress( );
+//otpコードのクリップボードコピー関数 
+window.clipBoardWrite = async (docIdText) => {
+	let id = docIdText;
+	let otp = document.getElementById(id).innerText;
+	//console.log(otp);
+	await navigator.clipboard.writeText(otp);
+	copyPopUp();
+}
 
 
+//web3 function===================
 
 /*private key only.*/
-//init　初期化
+//init　web3 初期化
 window.initApp = async () => {
-
-myAddress = await signer.getAddress();
-        /*
-          //wssプロバイダセット
-          //provider =  ethers.WebSocketProvider(prov);
-          //console.log(provider);
-
-          //httpは非推奨、wssを利用 wss://xxxxxx/yyyyyy/zzzzzzzzzzzzz --- infra 検証済
-          alchemy	  // Alchemy API Token	 WebSocket
-          etherscan	// Etherscan API Token	 
-          infura	  // INFURA Project ID or ProjectID and Project Secret	 WebSocket (like this wss://mainnet.infura.io/ws/v3/39a7b8b9d7924f8398xxxxxxxxxxxxab)
-          quorum	  // The number of backends that must agree (default: 2 for mainnet, 1 for testnets)
-        */
-
-        //set " private key - provider "
-        //simple ----> ethers.getDefaultProvider( [ network , [ options ] ] ) ⇒ Provider
-        //new ethers.providers.Web3Provider( externalProvider [ , network ] )
-        //new ethers.provider.WebSocketProvider( [ url [ , network ] ] )
-        //ethers.provider.WebSocketProvider---> If url is unspecified, the default "ws://localhost:8546" will be used. If network is unspecified, it will be queried from the network.
-
-
-    
-
-        /*        
-        //siner
-        signer = new ethers.Wallet( privateKey, provider );
-        console.log(signer);
-        //wallet----> ExternallyOwnedAccount and Signer の継承クラス。
-        wallet = ethers.Wallet( privateKey, provider );//provider connected wallet , unlocked private key.
-        console.log(wallet);
-        console.log(wallet.mnemonic); //display mnemonic
-        */        
-       
-        /*
-        // Create a wallet instance from a mnemonic...
-        example from ethers-official-page...
-          mnemonic = "announce room limb pattern dry unit scale effort smooth jazz weasel alcohol"
-          walletMnemonic = Wallet.fromMnemonic(mnemonic)
-          wallet = walletMnemonic.connect(provider)
-        */
-
-
+        //wssプロバイダセット
+        web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
+        // privateKeyをインポート・セット
+        account = web3.eth.accounts.privateKeyToAccount(privateKey);
+        console.log(account)
         // JSONを再びオブジェクトデータの形式に変換
-        console.log('myAccount' , myAddress );
-        //console.log('public-key' , wallet.publicKey );
+        myAccount = account.address;
 
-        document.getElementById("key2adr").innerText = myAddress;
+        console.log('myAccount' , myAccount );
+        document.getElementById("key2adr").innerText = myAccount;
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
     
-        //create instance.  new ethers.Contract( address , abi , signerOrProvider )
-        geneInstance = new ethers.Contract( geneContractAddress , abigene , signer );
-        authInstance = new ethers.Contract( authContractAddress , abiauth , signer );
-
-        /*
-        ***example 
-          // Read-Only; By connecting to a Provider, allows:
-          // - Any constant function
-          // - Querying Filters
-          // - Populating Unsigned Transactions for non-constant methods
-          // - Estimating Gas for non-constant (as an anonymous sender)
-          // - Static Calling non-constant methods (as anonymous sender)
-          const erc20 = new ethers.Contract(address, abi, provider);
-
-          // Read-Write; By connecting to a Signer, allows:
-          // - Everything from Read-Only (except as Signer, not anonymous)
-          // - Sending transactions for non-constant functions
-          const erc20_rw = new ethers.Contract(address, abi, signer)
-        */
+        //instance
+        geneInstance = new web3.eth.Contract(abigene, geneContractAddress);
+        authInstance = new web3.eth.Contract(abiauth, authContractAddress);
 };
 
 //load
 window.addEventListener('load', async function() {
-/*
     //key prov が設定されているか？
     if (!privateKey){
         return window.alert("key is empty")
     }
-    if (!prov){
-        return window.alert("prov is empty")
+    if (!web3prov){
+        return window.alert("web3prov is empty")
     }
-*/
     //初期化
     initApp();
+    /*
+    //httpはweb3 公式では非推奨、wssを利用
+      //wssプロバイダセット
+      web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov)); 
+      web3 = new Web3(new Web3.providers.HttpProvider(web3prov));
+    
+      //chainstack 未検証
+      https://docs.chainstack.com/operations/ethereum/tools#web3-js
+      const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://USERNAME:PASSWORD@WSS_ENDPOINT'));
+
+      //INFLA 検証済
+      https://infura.io/
+      web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/39a7b8b9d7924f8398627a6fccb53bab'));
+      web3 = new Web3(new Web3.providers.HttpProvider('wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab'));
+    */
 });
 
 //Auto login  TOTP 7number  
@@ -172,25 +131,26 @@ window.autoLoginBy7num = async () => {
 	if (!nftid){
 	  return window.alert("nftid is empty")
 	}
-	let otp7num = await geneInstance.getTotpRn7Num(nftid);
+	let otp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
 
 	let authResult = false ;
 
-	authResult =  await authInstance.authTotpRn7Num(myAddress, nftid, otp7num);
+	authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid, otp7num).call({from: myAccount});
 	console.log('auth Result is ', authResult);
 
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
-		sessionStorage.setItem('myAccount', signer.getAddress() );
+		sessionStorage.setItem('myAccount', myAccount );
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
 		return false;	
 	}
 }
 
-/*
-
+/** 
+ * otp getter setter 
+*/
 //getYourOTP   Only Owner can cahnge all OTP. 
 window.getOtp = async () => {
 
@@ -203,40 +163,32 @@ window.getOtp = async () => {
   
     //オーナー指示型OTP取得
     //ABIに記載の関数をコール。引数はtokenId   getConstOtp(uint256 tokenid) call returns bytes32
-    let resOtp = await geneInstance.getConstOtp(nftIdGetOtp);
+    let resOtp = await geneInstance.methods.getConstOtp(nftIdGetOtp).call({from: myAccount});
   
     document.getElementById("showGetYourOTP1").innerText = resOtp;
-    document.getElementById("youraddress11").innerText = signer.getAddress();
+    document.getElementById("youraddress11").innerText = myAccount;
   
     //contract name , contract address
-    let conName =  await geneInstance.name();
+    let conName =  await geneInstance.methods.name().call();
     document.getElementById("contractname").innerText = conName;
     document.getElementById("contractAdr").innerText = geneContractAddress;
-
-    //現在ネットワーク情報
-    console.log("net-name",provider.network.name) ;
-    console.log("net-id",provider.network.chainId) ;
-    
-    let netId  =  provider.network.chainId  ;
+    //アクセスしているネットワークの情報
+    let netId  =  await web3.eth.net.getId() ;
     document.getElementById("netid").innerText = netId;
-
-
-    //現在ブロック情報
-    let bn1  =  provider.block.number;    //otp取得時のブロック番号取得
+  
+    //otp取得時のブロック番号取得
+    let bn1  =  await web3.eth.getBlockNumber() ;
     document.getElementById("netBn").innerText =  bn1;
-    console.log("bn1",bn1);
-    console.log("blockNumber",provider.block.number);
-    console.log("block-hash",provider.block.hash) ;
-
-    console.log("block-time-stamp",provider.block.timestamp);
+    console.log(bn1);
   
     //playing card data
-    let idToPlayingCard =  await geneInstance.idToPlayingCard(nftIdGetOtp);
+    let idToPlayingCard =  await geneInstance.methods.idToPlayingCard(nftIdGetOtp).call({from: myAccount});
     console.log(idToPlayingCard);
   
     console.log("cardSuits",idToPlayingCard.cardSuits);
     console.log("cardNumber",idToPlayingCard.cardNumber);
     console.log("cardData",idToPlayingCard.cardData);
+    
     document.getElementById("idToCard4Suit1").innerText = idToPlayingCard.cardSuits;
     document.getElementById("idToCardNumber1").innerText = idToPlayingCard.cardNumber;
     document.getElementById("idToCardData1").innerText = idToPlayingCard.cardData;
@@ -246,7 +198,7 @@ window.getOtp = async () => {
       let el = document.getElementById('qrcode1');
       
       //let text1 = 'BNOTP:'+myAccount+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
-      let text1 = signer.getAddress()+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
+      let text1 = myAccount+'-'+nftIdGetOtp+'-'+resOtp; //アドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
       
       console.log(text1);
       
@@ -276,7 +228,7 @@ window.getOtp = async () => {
     
     let authResult = false ;
   
-    authResult =  await authInstance.authConstOtp(signer.getAddress(), nftid2auth, otp2auth);
+    authResult =  await authInstance.methods.authConstOtp(myAccount, nftid2auth, otp2auth).call({from: myAccount});
     console.log('auth Result is ', authResult);
   
     document.getElementById("showAuthResult1").innerText = authResult;
@@ -288,7 +240,7 @@ window.getOtp = async () => {
           //sessionStorage.setItem('key', 'value');
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
-          sessionStorage.setItem('myAccount', signer.getAddress() );
+          sessionStorage.setItem('myAccount', myAccount );
   
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -310,43 +262,25 @@ window.getOtp = async () => {
     
       //ABIに記載のtotp関数をコール。引数はtokenId   getYourOTP(uint256 tokenid) call returns bytes32
       //getYourTotp7Num(id)　もしくは　getYourTotp7NumRn(id)　が利用可能
-      let result2 = await geneInstance.getTotpRn7Num(nftidtoknowotp);
-      
+      let result2 = await geneInstance.methods.getTotpRn7Num(nftidtoknowotp).call({from: myAccount});
       //totp取得時のブロック番号取得
-      let bn  =  provider.block.number;
+      let bn  =  await web3.eth.getBlockNumber() ;
       //アクセスしているネットワークの情報
-      let netId  =  provider.network.chainId ;
+      let netId  =  await web3.eth.net.getId() ;
       //UNIXベース年月日・時刻を取得
       let nowUnixTime = now.toLocaleString();
   
-
-    //現在ネットワーク情報
-    console.log("net-name",provider.network.name) ;
-    console.log("net-id",provider.network.chainId) ;
-    
-    document.getElementById("netid").innerText = netId;
-
-
-    //現在ブロック情報
-    let bn1  =  provider.block.number;    //otp取得時のブロック番号取得
-    document.getElementById("netBn").innerText =  bn1;
-    console.log("bn1",bn1);
-
-    console.log("blockNumber",provider.block.number);
-    console.log("block-hash",provider.block.hash) ;
-    console.log("block-time-stamp",provider.block.timestamp);
-
       document.getElementById("showGetYourOTP3").innerText = result2;
-      document.getElementById("youraddress13").innerText = signer.getAddress();
+      document.getElementById("youraddress13").innerText = myAccount;
     
       //contract name
-      let result11 =  await geneInstance.name();
+      let result11 =  await geneInstance.methods.name().call();
       document.getElementById("contractname3").innerText = result11 + '-' + geneContractAddress;
   
       //QR code totp   text2はアドレス-トークンID-OTPの順にQRコードに書き出し。 '-'は区切り文字。
       //ETHアドレス、tokenId、totpOtpCode、ブロックナンバー、現在のブロック時間、台帳ネットワークID、ユーザーIPアドレス
       let el = document.getElementById('qrcode3');
-      let text2 = signer.getAddress() + '-' + nftidtoknowotp + '-' + result2 + '-'+ bn +'-' + netId + '-' + nowUnixTime ; 
+      let text2 = myAccount + '-' + nftidtoknowotp + '-' + result2 + '-'+ bn +'-' + netId + '-' + nowUnixTime ; 
       console.log(text2);
       document.getElementById("qrcode3time").innerText = 'QRコードを表示しました。' + bn ;
       if (qrcodeCount3 < 1){
@@ -369,13 +303,13 @@ window.getOtp = async () => {
         return window.alert("otp is empty")
       }
       let authResult = false ;
-      authResult =  await authInstance.authTotpRn7Num(signer.getAddress(), nftid2auth, otp2auth);
+      authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid2auth, otp2auth).call({from: myAccount});
       console.log('auth Result is ', authResult);
       document.getElementById("showAuthResult3").innerText = authResult;
       if (authResult == true) {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
-          sessionStorage.setItem('myAccount', signer.getAddress() );
+          sessionStorage.setItem('myAccount', myAccount );
           //ページ遷移
           window.location.href = './book/bon.html'; 
           return false;	
@@ -383,15 +317,13 @@ window.getOtp = async () => {
   }
 
 
-  */
-
 
 
 /*
 //------------------------------------------------
 //Author
 //1.Code by NZRI. Katsuya Nishizawa.
-//2020-07-23
+//2020-07-12
 //------------------------------------------------
 */
 
