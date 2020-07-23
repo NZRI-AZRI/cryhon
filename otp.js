@@ -69,7 +69,7 @@ let account ;//coinbase
 let myAddress;//eth address
 let wallet;//ethers wallet
 
-myAddress = await signer.getAddress();
+
 
 
 
@@ -77,7 +77,7 @@ myAddress = await signer.getAddress();
 //init　初期化
 window.initApp = async () => {
 
-
+        myAddress = await signer.getAddress();
         /*
           //wssプロバイダセット
           //provider =  ethers.WebSocketProvider(prov);
