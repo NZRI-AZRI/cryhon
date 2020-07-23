@@ -57,9 +57,9 @@ sessionStorage.setItem('myAccount', 0 );
 var now = new Date();
 
 //infra id
-const projectId = "39a7b8b9d7924f8398627a6fccb53bab";
+const projectIdUri = "wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab";
 //use rinkeby ropsten...
-const provider = new InfuraProvider("rinkeby", projectId);
+const provider = new ethers.provider.WebSocketProvider(projectIdUri);
 
 const signer = provider.getSigner();
 signer.connect(provider);
