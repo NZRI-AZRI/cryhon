@@ -8,7 +8,7 @@ GitLab ver is https://gitlab.com/katsuya_nishizawa/cryhon-crybon.
 
 BON or HON mean book(本) in japanese.
 
-Licence is UNLICENSE.(not MIT)
+Licence is UNLICENSE. Code Only Me  (not MIT) 
 code will be open-source-software. 
 I can use this app , sytem. (at 2020/07/13)
 
