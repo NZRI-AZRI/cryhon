@@ -30,14 +30,12 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 
 
 
-//import { ethers } from "./ethers-5.0.umd.min.js";
+import { ethers } from "ethers";
 
 //var provider;//ether js provider
 //var signer ;//ether js signer
 
-let account ;//coinbase
-let myAccount;//eth address
-let wallet;//ethers wallet
+
 
 var nonceCount; //nonnce (global var)
 var gasPri;
@@ -58,9 +56,21 @@ sessionStorage.setItem('myAccount', 0 );
 
 var now = new Date();
 
-const providers = ethers.providers;
-const web3Provider = new providers.Web3Provider(web3.currentProvider, "rinkeby");
-const signer = web3Provider.getSigner();
+// A Web3Provider wraps a standard Web3 provider, which is
+// what Metamask injects as window.ethereum into each page
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+// The Metamask plugin also allows signing transactions to
+// send ether and pay to change state within the blockchain.
+// For this, we need the account signer...
+const signer = provider.getSigner();
+
+let account ;//coinbase
+let myAddress;//eth address
+let wallet;//ethers wallet
+
+myAddress = await signer.getAddress();
+
 
 
 /*private key only.*/
@@ -109,10 +119,10 @@ window.initApp = async () => {
 
 
         // JSONを再びオブジェクトデータの形式に変換
-        console.log('myAccount' , await signer.getAddress() );
+        console.log('myAccount' , myAddress );
         //console.log('public-key' , wallet.publicKey );
 
-        document.getElementById("key2adr").innerText = await signer.getAddress();
+        document.getElementById("key2adr").innerText = myAddress;
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
     
@@ -164,7 +174,7 @@ window.autoLoginBy7num = async () => {
 
 	let authResult = false ;
 
-	authResult =  await authInstance.authTotpRn7Num(signer.getAddress(), nftid, otp7num);
+	authResult =  await authInstance.authTotpRn7Num(myAddress, nftid, otp7num);
 	console.log('auth Result is ', authResult);
 
 	if (authResult == true) {
