@@ -30,7 +30,7 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 
 
 
-import { ethers } from "./ethers-5.0.umd.min.js"
+//import { ethers } from "./ethers-5.0.umd.min.js";
 
 //var provider;//ether js provider
 //var signer ;//ether js signer
