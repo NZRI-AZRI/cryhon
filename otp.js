@@ -62,6 +62,7 @@ const projectId = "39a7b8b9d7924f8398627a6fccb53bab";
 const provider = new InfuraProvider("rinkeby", projectId);
 
 const signer = provider.getSigner();
+signer.connect(provider);
 
 let account ;//coinbase
 let myAddress;//eth address
@@ -70,7 +71,7 @@ let myAddress;//eth address
 let mnemonic = "announce room limb pattern dry unit scale effort smooth jazz weasel alcohol";
 let walletMnemonic = Wallet.fromMnemonic(mnemonic);
 let wallet = walletMnemonic.connect(provider);
-
+signer.getAddress( );
 
 
 
@@ -78,7 +79,7 @@ let wallet = walletMnemonic.connect(provider);
 //init　初期化
 window.initApp = async () => {
 
-        myAddress = await signer.getAddress();
+myAddress = await signer.getAddress();
         /*
           //wssプロバイダセット
           //provider =  ethers.WebSocketProvider(prov);
