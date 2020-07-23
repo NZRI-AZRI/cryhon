@@ -13,7 +13,8 @@ BON or HON mean book(本) in japanese.
 Licence is UNLICENSE. Only I can use this code now.
 (ライセンスはUNLICENSEです。このコードを使用できるのは私だけです。)
 
-In this text. "Licence is UNLICENSE" means "NOT Free software. People have unlicense. "
+In this text. "Licence is UNLICENSE" means "NOT Free software. People have unlicense. People have unlicensed."
+In this text. "Licence is UNLICENSE" means "NOT Free software. "
 (このテキストで。 「ライセンスはライセンスではありません」とは、「フリーソフトウェアではないことを意味します。)
 
 ※node.jsのpackage.jsonの項目で、"License"の項目をどのフリーソフトウェアライセンスにも許可しない意味でUNLICENSEとしたものです。
