@@ -30,7 +30,7 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 
 
 
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
 
 //var provider;//ether js provider
 //var signer ;//ether js signer
