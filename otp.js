@@ -109,10 +109,10 @@ window.initApp = async () => {
 
 
         // JSONを再びオブジェクトデータの形式に変換
-        console.log('myAccount' , signer.getAddress() );
+        console.log('myAccount' , await signer.getAddress() );
         //console.log('public-key' , wallet.publicKey );
 
-        document.getElementById("key2adr").innerText = signer.getAddress();
+        document.getElementById("key2adr").innerText = await signer.getAddress();
         document.getElementById("g-cont").innerText = geneContractAddress;
         document.getElementById("a-cont").innerText = authContractAddress;
     
