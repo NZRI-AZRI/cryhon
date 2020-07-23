@@ -24,8 +24,13 @@ LGPL3ライセンスを含むモジュールを使うので、本の内容とな
 The copyright of the code belongs to Katsuya Nishizawa.
 (コードの著作権はKatsuya Nishizawaに帰属します。)
 
-また使用している外部Javascriptモジュールの著作権はそれぞれの開発者に帰属しています。
-(The copyright of the external Javascript module used is owned by each developer.)
+The copyright of the external Javascript module used is owned by each developer.
+(また使用している外部Javascriptモジュールの著作権はそれぞれの開発者に帰属しています。)
+
+※外部モジュールがLGPL3やMITライセンスの為、暗黙のうちにそのライセンスをこのアプリやコードは継承します。
+初回公開時はweb3.jsがLGPL3ライセンスを含んでいたのでLGPL3ライセンス相当のライセンスです。
+7月13日初回公開の時点ではLGPL3ライセンスかつ、だれにも利用を許可しないことを前提に公開しています。
+
 
 Make flow is ... [node.js  --> Electron --> electron-builder-->Make 1 app file including Javascript-Html-Css-pdf-mp3-mp4-etc.. ---> 1 File such type are " exe-dmg-app ".]
 
