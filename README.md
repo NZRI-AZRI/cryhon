@@ -53,6 +53,24 @@ Javascript and HTML file include this..
 @otp.js/otp.html  [second. accses ethereum network via websocketURI.]
 @bon.js/bon.html  [(hon.js/hon.html) third. If one-time password authentication result is true , you are this crybon owner . you can read contents.
  content file are "html-txt , pdf , mp3 sound , mp4 movie , image file(comic image , manga-bon image) "]
-
-
 /*---------*/
+
+<footer>Author NZRI (https://github.com/NZRI-AZRI) "license": "non-free computer software , Proprietary" , "name": "Katusya Nishizawa" , "email": "nzri2azri@gmail.com"</footer>
+
+{
+    "name": "Crypto-bon(Crybon)",
+    "version": "1.0.0",
+    "description": "Local app of [web3-otp-contents-viewer]",
+    "main": "main.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": ["web3","otp","contents","viewer"],
+    "author": {
+      "name": "Katusya Nishizawa",
+      "email": "nzri2azri@gmail.com",
+      "url": "https://github.com/NZRI-AZRI"
+    },
+    "license": "non-free computer software , Proprietary"
+}
+
