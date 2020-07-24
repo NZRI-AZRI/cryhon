@@ -13,7 +13,7 @@
     "email": "nzri2azri@gmail.com",
     "url": "https://github.com/NZRI-AZRI"
   },
-  "license": "UNLICENSED"
+  "license": "non-free computer software"
 }
 */
 

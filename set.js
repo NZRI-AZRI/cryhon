@@ -13,8 +13,9 @@
     "email": "nzri2azri@gmail.com",
     "url": "https://github.com/NZRI-AZRI"
   },
-  "license": "UNLICENSED"
+  "license": "non-free computer software , Proprietary"
 }wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab
+
 */
 
 /*
