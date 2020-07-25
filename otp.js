@@ -387,8 +387,8 @@ async function downloadBookMarkFile() {
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
     console.log('json data is ', jsondata);
 
-    let messageStr = JSON.parse(jsondata);
-
+    //let messageStr = JSON.parse(jsondata);
+    let messageStr = JSON.stringify(jsondata);
 
 
     let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
