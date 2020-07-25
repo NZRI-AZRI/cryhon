@@ -336,7 +336,7 @@ async function downloadBookMarkFile() {
     //ABIに記載のtotp関数をコール。引数はtokenId 
     let totp7 = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
     
-    //念のため"latest"な現在ブロック入手
+    //念のため"latest"な現在ブロック表示
     let authBlock = web3.eth.getBlock("latest");
     console.log('auth block data is ', authBlock);
 
@@ -371,7 +371,6 @@ async function downloadBookMarkFile() {
         //auth block chain - contract data
         "contractName"       : contractName, 
         "netId"              : netId,//network data    
-        "authblock"          : authBlock,//network data  
         "blockNumber"        : bn, //time data
 
         //contents viewer data
