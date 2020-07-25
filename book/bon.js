@@ -41,7 +41,7 @@ window.initApp = async () => {
     myAccount = account.address;
 
     console.log('myAccount' , myAccount );
-    
+
     //instance
     geneInstance = new web3.eth.Contract(abigene, geneContractAddress);
     authInstance = new web3.eth.Contract(abiauth, authContractAddress);
@@ -75,8 +75,8 @@ window.getCertifiedTotp7Num = async () => {
 
 	if (authResult == true) {
 		return otp7num;	
-    }
-    if (authResult == false) {
+  }
+  if (authResult == false) {
 		return 0;	
 	}
 }
@@ -92,12 +92,17 @@ window.setBookMarkFile = async () => {
     //let totp7num = await getCertifiedTotp7Num();
     let totp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
 
+    console.log('nft data is ', myAccount , nftid , totp7num);
+    
     //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
     let bn  =  await web3.eth.getBlockNumber() ;//ブロック番号はUNIXタイムとは異なる時間の表現方法。
     let contractName =  await geneInstance.methods.name().call();
     let netId  =  await web3.eth.net.getId() ;
+
     //念のため"latest"な現在ブロック入手
     let nowBlock  =  await web3.eth.getBlock("latest");
+    console.log('block data is ', nowBlock);
+
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
     let nowUnixTime = now.toLocaleString();
 
@@ -140,7 +145,7 @@ window.setBookMarkFile = async () => {
     }
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
-    let signatureObject = web3.eth.accounts.sign(jsondata, privateKey);
+    let signatureObject = await web3.eth.accounts.sign(jsondata, privateKey);
     
     //output json file
     // 保存するJSONファイルの名前
@@ -179,46 +184,3 @@ window.recoverBookMarkFile = async (signatureObject) => {
   }
 }
 
-
-/*
-//non json file
-window.getCertifiedTotp7Num = async () => {
-
-    //ユーザーのアドレス nftid totp
-    let myAccount = sessionStorage.getItem('myAccount');
-    let nftid = sessionStorage.getItem('myNftId');
-    //let totp7num = await getCertifiedTotp7Num();
-    let totp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
-
-    let nftData = myAccount + "&" + nftid + "&" + totp7num ;
-
-    //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
-    let bn  =  await web3.eth.getBlockNumber() ;
-    const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
-    const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
-    let contractName =  await geneInstance.methods.name().call();
-    let netId  =  await web3.eth.net.getId() ;
-    //UNIXベース年月日・認証時刻
-    let nowUnixTime = now.toLocaleString();
-
-    let bnData = bn + "&" + geneContractAddress + "&" + authContractAddress + "&" + contractName + "&" + netId + "&" + nowUnixTime ;
-
-
-    //コンテンツ
-    //コンテンツ固有の秘密シード値
-    let contentsKey = "Cryhon0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1クリホンCryhonとクリボンCrybonは同じ1Ed13902e42592f8a3631793D39B74e48aA6D558クリホン";
-    //既読のページの番号、セッション番号、時間数
-    //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
-    let pageNumber = sessionStorage.getItem('pdfPage');
-    //閲覧した人の名前
-    let userName = "kn";
-    //ユーザーの読書コメント、しおり
-    let userComment = "OK";
-    //閲覧者、保有者の余白note
-    let note = "cryhon-crybon";
-
-    let contentsReaderData = contentsKey + "&" + pageNumber + "&" + userName + "&" + userComment + "&" + note;
-
-    let data = nftData + "&" + bnData + "&" + contentsReaderData;
-}
-  */
