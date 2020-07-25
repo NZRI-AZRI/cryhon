@@ -29,11 +29,15 @@ var now = new Date();
 
 //web3 function==init　web3 初期化
 window.initApp = async () => {
+    
+    //privateKey - wssUri
+    privateKey= sessionStorage.getItem('privateKey@');
+    web3prov = sessionStorage.getItem('prov');
+
     //wssプロバイダセット
     web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
     // privateKeyをインポート・セット
     account = web3.eth.accounts.privateKeyToAccount(privateKey);
-    console.log(account)
     // JSONを再びオブジェクトデータの形式に変換
     myAccount = account.address;
 
@@ -72,8 +76,8 @@ window.getCertifiedTotp7Num = async () => {
 
 	if (authResult == true) {
 		return otp7num;	
-  }
-  if (authResult == false) {
+    }
+    if (authResult == false) {
 		return 0;	
 	}
 }
@@ -146,7 +150,7 @@ window.setBookMarkFile = async () => {
     }
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
-    let signatureObject = await web3.eth.accounts.sign(jsondata, privateKey);
+    let signatureObject = web3.eth.accounts.sign(jsondata, privateKey);
     
     //output json file
     // 保存するJSONファイルの名前
@@ -168,7 +172,7 @@ window.setBookMarkFile = async () => {
     a.click();
 }
 
-//Auto login  TOTP 7number  
+/*
 window.recoverBookMarkFile = async (signatureObject) => {
     //recoverが成功したらコンテンツページに遷移する。
     if( web3.eth.accounts.recover(signatureObject)==sessionStorage.getItem('myAccount') ){
@@ -184,4 +188,4 @@ window.recoverBookMarkFile = async (signatureObject) => {
         window.location.href = './book/bon.html'; 
   }
 }
-
+*/
