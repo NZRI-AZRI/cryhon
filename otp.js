@@ -335,90 +335,91 @@ async function downloadBookMarkFile() {
 
     //ABIに記載のtotp関数をコール。引数はtokenId 
     let totp7 = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
+
+    let authResult = false ;
+    authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid, totp7).call({from: myAccount});
+    console.log('auth Result is ', authResult);
+
+    //認証結果が真のとき、署名してJSONファイルをダウンロード
+    if (authResult == true) {
+        //念のため"latest"な現在ブロック表示
+        let authBlock = web3.eth.getBlock("latest");
+        console.log('auth block data is ', authBlock);
+
+        //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
+        let bn  =  await web3.eth.getBlockNumber() ;
+        let netId  =  await web3.eth.net.getId() ;
+        let contractName =  await geneInstance.methods.name().call();
+
+        //コンテンツ
+        //コンテンツ固有の秘密シード値
+        let contentsKey = "CryhonISBN:0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
+
+        //既読のページの番号、セッション番号、時間数
+        //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
+        let pageNumber = 0;//このページは認証ページの為、ページ番号はゼロ。
+
+        //閲覧した人の名前,
+        let userName = "kn";
+        //ユーザーの読書コメント、しおり
+        let userComment = "OK...";
+        //閲覧者、保有者の余白note
+        let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
+        //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
+        let time = now.toLocaleString();
+
+        var jsondata = {
+            //auth totp data
+            "user-eoa-address"   : myAccount,
+            "nft-id"             : nftid, 
+            "TOTP-7digit"        : totp7,     
+
+            //auth block chain - contract data
+            "contractName"       : contractName, 
+            "netId"              : netId,//network data    
+            "blockNumber"        : bn, //time data
+
+            //contents viewer data
+            "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
+            "pageNumber"         : pageNumber,        
+            "userName"           : userName,
+            "userComment"        : userComment,
+            "note"               : note,
+            "time"               : time //unixTime of makingBookmarkFile
+        }
+
+        //sign データに署名。　設定画面、認証画面でこの公示栞データを外部から読み込めば簡易な閲覧が可能にする。
+        //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
+        console.log('json data is ', jsondata);
+
+        //let messageStr = JSON.parse(jsondata);
+        let messageStr = JSON.stringify(jsondata);
+
+
+        let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
+        console.log('sign data(bookmark data) is ', signatureObject);
     
-    //念のため"latest"な現在ブロック表示
-    let authBlock = web3.eth.getBlock("latest");
-    console.log('auth block data is ', authBlock);
+        //blob download
+        //var blob = new Blob([ JSON.stringify(signatureObject) ], { "type" : "text/plain" });
+        
+        var blob = new Blob(
+          [JSON.stringify(signatureObject)],
+          { type: 'application/json' }
+        );    
+        console.log('blob is ', blob);
 
-    //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
-    let bn  =  await web3.eth.getBlockNumber() ;
-    let netId  =  await web3.eth.net.getId() ;
-    let contractName =  await geneInstance.methods.name().call();
-
-    //コンテンツ
-    //コンテンツ固有の秘密シード値
-    let contentsKey = "CryhonISBN:0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
-
-    //既読のページの番号、セッション番号、時間数
-    //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
-    let pageNumber = 0;//このページは認証ページの為、ページ番号はゼロ。
-
-    //閲覧した人の名前,
-    let userName = "kn";
-    //ユーザーの読書コメント、しおり
-    let userComment = "OK...";
-    //閲覧者、保有者の余白note
-    let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
-    //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    let time = now.toLocaleString();
-
-    var jsondata = {
-        //auth totp data
-        "user-eoa-address"   : myAccount,
-        "nft-id"             : nftid, 
-        "TOTP-7digit"        : totp7,     
-
-        //auth block chain - contract data
-        "contractName"       : contractName, 
-        "netId"              : netId,//network data    
-        "blockNumber"        : bn, //time data
-
-        //contents viewer data
-        "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
-        "pageNumber"         : pageNumber,        
-        "userName"           : userName,
-        "userComment"        : userComment,
-        "note"               : note,
-        "time"               : time //unixTime of makingBookmarkFile
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.download = 'cryhonBookmark.json';
+        a.href = url;
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
     }
-
-    //sign データに署名。　設定画面、認証画面でこの公示栞データを外部から読み込めば簡易な閲覧が可能にする。
-    //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
-    console.log('json data is ', jsondata);
-
-    //let messageStr = JSON.parse(jsondata);
-    let messageStr = JSON.stringify(jsondata);
-
-
-    let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
-    console.log('sign data(bookmark data) is ', signatureObject);
- 
-    //blob download
-    //var blob = new Blob([ JSON.stringify(signatureObject) ], { "type" : "text/plain" });
-    
-    var blob = new Blob(
-      [JSON.stringify(signatureObject)],
-      { type: 'application/json' }
-    );    
-    console.log('blob is ', blob);
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.download = 'cryhonBookmark.json';
-    a.href = url;
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-
 }
 
-//公示栞読み込み部分
-window.uploadBookMarkFile = async () => {
-//recover
-//web3.eth.accounts.recover(signatureObject);
-//代入したブックマークファイルから、もしアドレス値が戻れば認証完了
-}
+
 
 window.getBookMarkFile = async () => {
   let nftid = document.getElementById("nftidtoknowotp4").value;
@@ -427,3 +428,13 @@ window.getBookMarkFile = async () => {
   }
   downloadBookMarkFile();
 }
+
+
+//公示栞読み込み部分
+window.uploadBookMarkFile = async () => {
+  //recover
+  //web3.eth.accounts.recover(signatureObject);
+  //代入したブックマークファイルから、もしアドレス値が戻れば認証完了
+}
+
+
