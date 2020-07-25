@@ -83,10 +83,8 @@ window.initApp = async () => {
         web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
         // privateKeyをインポート・セット
         account = web3.eth.accounts.privateKeyToAccount(privateKey);
-        console.log(account)
         // JSONを再びオブジェクトデータの形式に変換
         myAccount = account.address;
-
         console.log('myAccount' , myAccount );
         document.getElementById("key2adr").innerText = myAccount;
         document.getElementById("g-cont").innerText = geneContractAddress;
