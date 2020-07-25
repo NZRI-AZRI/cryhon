@@ -15,15 +15,16 @@
   },
   "license": "non-free computer software , Proprietary"
 }wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab
-
 */
 
 /*
-https://qiita.com/hm0429/items/082ad6ef5749e984d904  
-
-new ethers.provider.WebSocketProvider( [ url [ , network ] ] );
-new ethers.providers.JsonRpcProvider( [ url [ , aNetworkish ] ] );
+//------------------------------------------------
+//Author
+//1.Code by NZRI. Katsuya Nishizawa.
+//2020-07-24
+//------------------------------------------------
 */
+
 
 
 
@@ -35,8 +36,8 @@ var prov;
 //セッションストレージ初期化
 sessionStorage.setItem('prov',       0 );
 sessionStorage.setItem('privateKey@',0 );
-sessionStorage.setItem('inputFile@' ,0 );
-sessionStorage.setItem('outputFile@',0 );
+sessionStorage.setItem('bookMark@', 0 );
+
 
 var now = new Date();
 
@@ -72,9 +73,28 @@ form.myfile.addEventListener( 'change', function(e) {
     })
 })
 
-//load output file (public bookmark file)
+//load output file (public bookmark file json)
 var form2 = document.forms.myform2;
+form2.myfile2.addEventListener( 'change', function(e) {
+ 
+    var result = e.target.files[0];
+ 
+    //FileReaderのインスタンスを作成する
+    var reader = new FileReader();
+  
+    //読み込んだファイルの中身を取得する
+    reader.readAsText( result );
+  
+    //ファイルの中身を取得後に処理を行う
+    reader.addEventListener( 'load', function() {
 
+      document.getElementById("settingResult").innerText="Bookmark File saved";
+
+      //公開栞読み込み。秘密鍵を持つ人が署名した公開栞（signatureObject）をJSONファイルで読み込む　Object:The signature object
+      console.log( JSON.parse(reader.result) );//JSON形式に変換する      
+
+    })
+})
 
 
 
@@ -115,10 +135,3 @@ window.addEventListener('load', async function() {
 });
 
 
-/*
-//------------------------------------------------
-//Author
-//1.Code by NZRI. Katsuya Nishizawa.
-//2020-07-23
-//------------------------------------------------
-*/

@@ -22,6 +22,7 @@
 //sessionStrageから代入
 let privateKey= sessionStorage.getItem('privateKey@');
 let web3prov = sessionStorage.getItem('prov');
+sessionStorage.setItem('bookMark@', 0 );
 
 //rinkeby contract
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
@@ -53,6 +54,7 @@ var qrcodeCount3 = 0;
 
 sessionStorage.setItem('authResult', 0 );//auth result セッションストレージ初期化
 sessionStorage.setItem('myAccount', 0 );
+sessionStorage.setItem('myNftId', 0 );
 
 var now = new Date();
 
@@ -141,7 +143,8 @@ window.autoLoginBy7num = async () => {
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
-		sessionStorage.setItem('myAccount', myAccount );
+    sessionStorage.setItem('myAccount', myAccount );
+    sessionStorage.setItem('myNftId', nftid );
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
 		return false;	
@@ -241,6 +244,7 @@ window.getOtp = async () => {
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
+          sessionStorage.setItem('myNftId', nftid );
   
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -310,6 +314,8 @@ window.getOtp = async () => {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
+          sessionStorage.setItem('myNftId', nftid );
+
           //ページ遷移
           window.location.href = './book/bon.html'; 
           return false;	
