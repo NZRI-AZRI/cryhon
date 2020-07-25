@@ -508,8 +508,8 @@ form.myfile.addEventListener( 'change', function(e) {
           console.log( message );
 
           // JSONをオブジェクトデータの形式に変換
-          //let obj = JSON.parse( message );
-          //console.log( obj );
+          let obj = JSON.parse( message );
+          console.log( obj );
 
           let time = message.time;
           console.log(time);
