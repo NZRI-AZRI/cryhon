@@ -333,7 +333,7 @@ async function downloadBookMarkFile(nftid) {
     console.log('nft data is ', myAccount , nftid );
 
     //ABIに記載のtotp関数をコール。引数はtokenId 
-    let totp7 = await geneInstance.methods.getTotpRn7Num(nftidtoknowotp).call({from: myAccount});
+    let totp7 = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
     
     //念のため"latest"な現在ブロック入手
     let authBlock = web3.eth.getBlock("latest");
