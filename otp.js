@@ -404,7 +404,7 @@ async function downloadBookMarkFile(nftid) {
 }
 
 //公示栞読み込み部分
-window.downloadBookMarkFile = async () => {
+window.uploadBookMarkFile = async () => {
 //recover
 //web3.eth.accounts.recover(signatureObject);
 //代入したブックマークファイルから、もしアドレス値が戻れば認証完了
