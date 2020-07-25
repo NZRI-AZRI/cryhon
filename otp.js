@@ -144,11 +144,11 @@ window.autoLoginBy7num = async () => {
     sessionStorage.setItem('netId'       , await web3.eth.net.getId() );
 
     //念のため"latest"な現在ブロック入手
-    sessionStorage.setItem('nowBlock'    , await web3.eth.getBlock("latest") );
+    sessionStorage.setItem('authBlock'    , await web3.eth.getBlock("latest") );
     console.log('block data is ', nowBlock);
 
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    sessionStorage.setItem('nowUnixTime' , now.toLocaleString() );
+    sessionStorage.setItem('authUnixTime' , now.toLocaleString() );
 
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
