@@ -121,13 +121,13 @@ window.addEventListener('load', async function() {
 window.autoLoginBy7num = async () => {
 
   let nftid = document.getElementById("nftidtoknowotp4").value;
-  sessionStorage.setItem('myNftId', document.getElementById("nftidtoknowotp4").value );
-  sessionStorage.setItem('totp7' , await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount}));
+
 	if (!nftid){
 	  return window.alert("nftid is empty")
-	}
-	let otp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
-
+  }
+  
+  let otp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
+  
 	let authResult = false ;
 	authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid, otp7num).call({from: myAccount});
 	console.log('auth Result is ', authResult);
@@ -135,15 +135,17 @@ window.autoLoginBy7num = async () => {
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
-    sessionStorage.setItem('myAccount', myAccount );
+    sessionStorage.setItem('myAccount'   , JSON.stringify(myAccount) );
+    sessionStorage.setItem('myNftId'     , JSON.stringify(nftid) );
+    sessionStorage.setItem('totp7'       , JSON.stringify(otp7num) );
 
     //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
-    sessionStorage.setItem('blockNum'    , await web3.eth.getBlockNumber() );
-    sessionStorage.setItem('contractName', await geneInstance.methods.name().call() );
-    sessionStorage.setItem('netId'       , await web3.eth.net.getId() );
+    sessionStorage.setItem('blockNum'    , JSON.stringify(  await web3.eth.getBlockNumber() ) );
+    sessionStorage.setItem('contractName', JSON.stringify(  await geneInstance.methods.name().call()  ) );
+    sessionStorage.setItem('netId'       , JSON.stringify(  await web3.eth.net.getId() ));
 
     //念のため"latest"な現在ブロック入手
-    sessionStorage.setItem('authBlock'    , await web3.eth.getBlock("latest") );
+    sessionStorage.setItem('authBlock'   , JSON.stringify(  await web3.eth.getBlock("latest") ) );
     console.log('block data is ', nowBlock);
 
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
