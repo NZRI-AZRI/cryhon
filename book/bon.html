@@ -21,6 +21,30 @@
 
 
 <body>
+<!-- web3 js (LGPL-3.0のため、コンテンツ含む単一実行ファイルのソースコードを公開しなければいけない)    -->
+<script type="text/javascript" src="./web3.min.js"></script>
+
+<!--Ethers js (MIT　こちらを採用したい。)-->
+<script type="text/javascript" src="./ethers.umd.min.js" ></script>
+
+<!--QR code write (MIT) -->
+<!--QR にアドレスNFTIDOTPを書き込み、表示させる。画面を複写するとQRコードも取り込むことに。 -->
+
+<!--あるいはアドレスをQRコード化してリーダー部に置くといい。
+秘密鍵だとやりすぎ。しかし秘密鍵を表示させればスクリーンキャプチャへの抑止力になる。アドレスの表示が妥当。
+ランダムにビューアの四隅にQRコードが出現するイメージ。-->
+
+<script type="text/javascript" src="./qrcode.min.js"></script>
+
+<!--  index.jsよりもよりも先に読み込み  -->
+<script type="text/javascript" src="./abiauth.js"></script>
+<script type="text/javascript" src="./abigene.js"></script>
+
+<!--メインスクリプト -->
+<script type="text/javascript" src="./bon.js"></script>
+
+
+
 
 <div>
     <h1>ログイン後のコンテンツページです</h1><br>
@@ -28,6 +52,11 @@
     <span>
         <p>・戻る場合はこのボタンを押してください。</p>
         <INPUT type="button" onclick="history.back()" value="１つ前のページに戻る">
+        <br><br><br>
+        
+        <p>・公開栞ファイル作成を作成してください。ネットワーク遮断時でも制限付きで閲覧できます</p>
+        <INPUT type="button" onclick="setBookMarkFile()" value="公開栞ファイル作成">
+        <br><br><br>
 
     <h2>コンテンツ</h2>
     <p>ここにコンテンツを記述します。</p>
@@ -36,7 +65,6 @@
     </span>
     <br><br><br>
 </div>
-
 
 
 <h1>'PDF.js' example</h1>
@@ -73,6 +101,7 @@
     scale = 0.8,
     canvas = document.getElementById('the-canvas'),
     ctx = canvas.getContext('2d');
+  sessionStorage.setItem('pdfPage', pageNum );
 
 /**
  * Get page info from document, resize canvas accordingly, and render page.
@@ -128,6 +157,7 @@ function onPrevPage() {
     return;
   }
   pageNum--;
+  sessionStorage.setItem('pdfPage', pageNum );//
   queueRenderPage(pageNum);
 }
 document.getElementById('prev').addEventListener('click', onPrevPage);
@@ -140,6 +170,7 @@ function onNextPage() {
     return;
   }
   pageNum++;
+  sessionStorage.setItem('pdfPage', pageNum );//
   queueRenderPage(pageNum);
 }
 document.getElementById('next').addEventListener('click', onNextPage);
@@ -154,15 +185,17 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
   // Initial/first page rendering
   renderPage(pageNum);
 });
+
+
 </script>
 
 <hr>
 <h2>JavaScript code:</h2>
 <pre id="code"></pre>
 <script>
-  document.getElementById('code').textContent =
-      document.getElementById('script').text;
+  //document.getElementById('code').textContent = document.getElementById('script').text;//ソース表示
 </script>
+
 
 
 </body>
