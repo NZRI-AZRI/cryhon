@@ -314,11 +314,7 @@ window.getOtp = async () => {
       }
   }
 
-window.getBookMarkFile = async () => {
-  let nftid = document.getElementById("nftidtoknowotp4").value;
-  console.log('nft data is ', nftid );
-  downloadBookMarkFile(nftid);
-}
+
 
 
 /*
@@ -364,7 +360,7 @@ async function downloadBookMarkFile(nftid) {
     let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
     let time = now.toLocaleString();
-    
+
     var jsondata = {
         //auth totp data
         "user-eoa-address"   : myAccount,
@@ -412,4 +408,10 @@ window.downloadBookMarkFile = async () => {
 //recover
 //web3.eth.accounts.recover(signatureObject);
 //代入したブックマークファイルから、もしアドレス値が戻れば認証完了
+}
+
+window.getBookMarkFile = async () => {
+  let nftid = document.getElementById("nftidtoknowotp4").value;
+  console.log('nft data is ', nftid );
+  downloadBookMarkFile(nftid);
 }
