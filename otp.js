@@ -450,7 +450,7 @@ form.myfile.addEventListener( 'change', function(e) {
     reader.readAsText( result );
   
     //ファイルの中身を取得後に処理を行う
-    reader.addEventListener( 'load', function() {
+    reader.addEventListener( 'load', async function() {
 
         //JSON形式に変換する    
         console.log( JSON.parse(reader.result) );  
