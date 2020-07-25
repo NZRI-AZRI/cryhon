@@ -372,19 +372,14 @@ async function downloadBookMarkFile() {
         //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
         let time = now.toLocaleString();
 
-        //UNIXベース年月日・認証時刻にシークレットを加えた例
+        //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
         let timeSecret = secretKey + time + geneContractAddress;
         //let timeSecret = secretKey + time + myAccount + nftid + totp7 + contractName + geneContractAddress;
         console.log(timeSecret);
 
-        async function digestMessage(message) {
-          const encoder = new TextEncoder();
-          const data = encoder.encode(message);
-          const hash = await crypto.subtle.digest('SHA-256', data);
-          return hash;
-        }
-        
-        const timeSecretHash  = await digestMessage(timeSecret);
+        const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+        shaObj.update(timeSecret);
+        const timeSecretHash = shaObj.getHash("HEX");
         console.log(timeSecretHash);
 
         var jsondata = {
@@ -507,22 +502,19 @@ form.myfile.addEventListener( 'change', function(e) {
         if(recoverSign==myAccount){
 
             //※次に署名されたブックマークファイルが偽物か本物かを調べる。
-            
+
             console.log('uploadedfile-timestmphash is ' , uploadFile.timeSecretHash);
             let time = uploadFile.time;  
             console.log('uploadedfile-time is ' , time);
+
             //UNIXベース年月日・認証時刻にシークレットを加えた例
             let timeSecret = secretKey + time + geneContractAddress;
-            console.log(timeSecret);
-    
-            async function digestMessage(message) {
-              const encoder = new TextEncoder();
-              const data = encoder.encode(message);
-              const hash = await crypto.subtle.digest('SHA-256', data);
-              return hash;
-            }
-            const timeSecretHash  = await digestMessage(timeSecret);
-            console.log(timeSecretHash);
+            console.log('uploadedfile-timeS is ' ,timeSecret);
+
+            const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+            shaObj.update(timeSecret);
+            const timeSecretHash = shaObj.getHash("HEX");
+            console.log('uploadedfile-timeSH ' ,timeSecretHash);
 
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
             //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
@@ -534,7 +526,7 @@ form.myfile.addEventListener( 'change', function(e) {
               console.log( "auth is true." );  
 
               //ページ遷移
-              window.location.href = './book/bon.html'; 
+              //window.location.href = './book/bon.html'; 
               return false;	
             }
         }
