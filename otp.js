@@ -22,7 +22,7 @@
 //sessionStrageから代入
 let privateKey= sessionStorage.getItem('privateKey@');
 let web3prov = sessionStorage.getItem('prov');
-sessionStorage.setItem('bookMark@', 0 );
+
 
 //rinkeby contract
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
@@ -37,6 +37,7 @@ let web3;
 let account ;//coinbase
 let myAccount;//eth address
 let wallet;
+let nftid;
 
 let geneInstance; // instance
 let authInstance; // instance
@@ -135,21 +136,10 @@ window.autoLoginBy7num = async () => {
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
-    sessionStorage.setItem('myAccount'   , JSON.stringify(myAccount) );
-    sessionStorage.setItem('myNftId'     , JSON.stringify(nftid) );
-    sessionStorage.setItem('totp7'       , JSON.stringify(otp7num) );
+    sessionStorage.setItem('myAccount'   , myAccount );
 
-    //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
-    sessionStorage.setItem('blockNum'    , JSON.stringify(  await web3.eth.getBlockNumber() ) );
-    sessionStorage.setItem('contractName', JSON.stringify(  await geneInstance.methods.name().call()  ) );
-    sessionStorage.setItem('netId'       , JSON.stringify(  await web3.eth.net.getId() ));
-
-    //念のため"latest"な現在ブロック入手
-    sessionStorage.setItem('authBlock'   , JSON.stringify(  await web3.eth.getBlock("latest") ) );
-    console.log('block data is ', nowBlock);
-
-    //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    sessionStorage.setItem('authUnixTime' , now.toLocaleString() );
+    //公開栞を強制的にダウンロード
+    downloadBookMarkFile();
 
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
@@ -250,8 +240,10 @@ window.getOtp = async () => {
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
-          sessionStorage.setItem('myNftId', nftid );
-  
+
+          //公開栞を強制的にダウンロード
+          downloadBookMarkFile();
+          
           //ページ遷移
           window.location.href = './book/bon.html'; 
           //window.open('./contents.html', '_blank');
@@ -320,13 +312,16 @@ window.getOtp = async () => {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
-          sessionStorage.setItem('myNftId', nftid );
+
+          //公開栞を強制的にダウンロード
+          downloadBookMarkFile();
 
           //ページ遷移
           window.location.href = './book/bon.html'; 
           return false;	
       }
   }
+
 
 
 
@@ -339,3 +334,88 @@ window.getOtp = async () => {
 //------------------------------------------------
 */
 
+//公開栞 生成部分===(秘密鍵とは異なり、公開されてもトークンにはアクセスされない鍵を栞とする。)
+//book-mark file
+window.downloadBookMarkFile = async (nftid) => {
+
+    //ユーザーのアドレス nftid totp
+    console.log('nft data is ', myAccount , nftid );
+
+    //ABIに記載のtotp関数をコール。引数はtokenId 
+    let totp7 = await geneInstance.methods.getTotpRn7Num(nftidtoknowotp).call({from: myAccount});
+    
+    //念のため"latest"な現在ブロック入手
+    let authBlock = web3.eth.getBlock("latest");
+    console.log('auth block data is ', authBlock);
+
+    //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
+    let bn  =  await web3.eth.getBlockNumber() ;
+    let netId  =  await web3.eth.net.getId() ;
+    let contractName =  await geneInstance.methods.name().call();
+
+    //コンテンツ
+    //コンテンツ固有の秘密シード値
+    let contentsKey = "CryhonISBN:0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
+
+    //既読のページの番号、セッション番号、時間数
+    //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
+    let pageNumber = 0;//このページは認証ページの為、ページ番号はゼロ。
+
+    //閲覧した人の名前,
+    let userName = "kn";
+    //ユーザーの読書コメント、しおり
+    let userComment = "OK...";
+    //閲覧者、保有者の余白note
+    let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
+    //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
+    let time = now.toLocaleString();
+
+
+   
+    var jsondata = {
+        //auth totp data
+        "user-eoa-address"   : myAccount,
+        "nft-id"             : nftid, 
+        "TOTP-7digit"        : totp7,     
+
+        //auth block chain - contract data
+        "contractName"       : contractName, 
+        "netId"              : netId,//network data    
+        "authblock"          : authBlock,//network data  
+        "blockNumber"        : bn, //time data
+
+        //contents viewer data
+        "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
+        "pageNumber"         : pageNumber,        
+        "userName"           : userName,
+        "userComment"        : userComment,
+        "note"               : note,
+        "time"               : time //unixTime of makingBookmarkFile
+    }
+
+    //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
+    //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
+    console.log('json data is ', jsondata);
+
+
+    let signatureObject = await web3.eth.accounts.sign(jsondata, privateKey);
+    console.log('sign data(bookmark data) is ', signatureObject);
+ 
+    //blob download
+    const blob = new Blob([signatureObject], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.download = 'cryhonBookmark.json';
+    a.href = url;
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    
+}
+
+//公開栞読み込み部分
+window.downloadBookMarkFile = async () => {
+//recover
+//web3.eth.accounts.recover(signatureObject);
+}
