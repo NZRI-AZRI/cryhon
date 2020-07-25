@@ -135,7 +135,7 @@ window.autoLoginBy7num = async () => {
 
 	if (authResult == true) {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-		sessionStorage.setItem('authResult', 1 );
+		sessionStorage.setItem('authResult', 525600 );
     sessionStorage.setItem('myAccount'   , myAccount );
 
 		//ページ遷移
@@ -235,7 +235,7 @@ window.getOtp = async () => {
           //sessionStorage.getItem('key') 取得
           //sessionStorage.setItem('key', 'value');
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
-          sessionStorage.setItem('authResult', 1 );
+          sessionStorage.setItem('authResult', 525600 );
           sessionStorage.setItem('myAccount', myAccount );
 
           
@@ -305,7 +305,7 @@ window.getOtp = async () => {
       document.getElementById("showAuthResult3").innerText = authResult;
       if (authResult == true) {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-          sessionStorage.setItem('authResult', 1 );
+          sessionStorage.setItem('authResult', 525600 );
           sessionStorage.setItem('myAccount', myAccount );
 
           //ページ遷移
@@ -430,11 +430,54 @@ window.getBookMarkFile = async () => {
 }
 
 
-//公示栞読み込み部分
-window.uploadBookMarkFile = async () => {
-  //recover
-  //web3.eth.accounts.recover(signatureObject);
-  //代入したブックマークファイルから、もしアドレス値が戻れば認証完了
-}
+//公示栞読み込み部分uploadBookMarkFile 
+//load csv inputfile (private key file and websocketURI)
+var form = document.forms.myform;
+form.myfile.addEventListener( 'change', function(e) {
+ 
+    var result = e.target.files[0];
+ 
+    //FileReaderのインスタンスを作成する
+    var reader = new FileReader();
+  
+    //読み込んだファイルの中身を取得する
+    reader.readAsText( result );
+  
+    //ファイルの中身を取得後に処理を行う
+    reader.addEventListener( 'load', function() {
 
+        //JSON形式に変換する    
+        console.log( JSON.parse(reader.result) );  
+        let uploadFile = JSON.parse(reader.result);
 
+        //web3.jsによりサインを復号化する
+        let recoverSign = web3.eth.accounts.recover(uploadFile)
+        console.log( 'recover is ',recoverSign );  
+        /**
+         * 復号化した後の戻り値がアカウントと同じならば秘密鍵とブックマークファイルは一致しているのでnftの持ち主であったことが分かる。
+         * 持ち主の栞を持っているので10分のログイン権限を付与する。
+         * ただしブックマーク時間からかけ離れている場合には減らす。(10分/n年)の閲覧時間に制限する。
+         * 仮想コンピュータやオフラインマシンでは時間を好きに設定できるはずだが、それでも10分が限界となる。
+         * 10分以上読みたければ再度アプリを起動しないといけない。
+         * 
+         * この機能は本を所有するという点で重要。常に分散台帳ネットワークが稼働していないと本が読めないのは所有権を侵害しかねない。
+         * 万一、例えば地震でネットワークが停電などで部分的に停止したとき、ノートパソコンから見たい本を見ようとしたとき、
+         * 秘密鍵は持っていて、本のデータはアプリに入っているのに本が見れないということになる。
+         * 
+         * それを解決するため、正常時に分散台帳ネットワークにログインしたとき、ブックマークファイルを作成し、
+         * 秘密鍵、ブックマークファイル、アプリの３つをセットでPCに保存してもらうことでオフラインでも閲覧できるようにする。
+         * 
+         * 緊急時に書物をある部分だけ読みたいときに使える試し読み機能である。
+         * この10分制限機能は動画ファイル、音楽ファイル、漫画本などをじっくり見たり聞いたり読んだりできないようにストレスを与える。
+         */
+        if(recoverSign==myAccount){
+            //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
+            sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
+            sessionStorage.setItem('myAccount', myAccount );
+
+            //ページ遷移
+            window.location.href = './book/bon.html'; 
+            return false;	
+        }
+    })
+})
