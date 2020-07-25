@@ -431,7 +431,7 @@ window.getBookMarkFile = async () => {
 
 async function web3RecoverSignAddress(uploadFile){
 
-  let recover = web3.eth.accounts.recover(uploadFile);
+  let recover = await web3.eth.accounts.recover(uploadFile);
 
   return recover ;
 }
@@ -476,6 +476,11 @@ form.myfile.addEventListener( 'change', function(e) {
          * 
          * 緊急時に書物をある部分だけ読みたいときに使える試し読み機能である。
          * この10分制限機能は動画ファイル、音楽ファイル、漫画本などをじっくり見たり聞いたり読んだりできないようにストレスを与える。
+         * 
+         * なおコンテンツの著作権者や版権元がこの関数の有無を決める。
+         * ただし、古書の様に人類の共通の財産としてデータを残す観点からはこの機能が推奨される。
+         * クリエイターが作ったものが忘れ去られるのがいいのか、残ることがいいのかはクリエイターの判断による。
+         * この機能の付いたNFTとこの機能がついていないNFTに分けて売り出すのも方法の一つ。
          */
         if(recoverSign==myAccount){
             //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
