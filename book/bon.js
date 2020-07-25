@@ -90,18 +90,20 @@ window.setBookMarkFile = async () => {
     let totp7num = sessionStorage.getItem('totp7');
 
     console.log('nft data is ', myAccount , nftid , totp7num);
-    
+
     //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
-    let bn  =  await web3.eth.getBlockNumber() ;//ブロック番号はUNIXタイムとは異なる時間の表現方法。
-    let contractName =  await geneInstance.methods.name().call();
-    let netId  =  await web3.eth.net.getId() ;
+    let bn = sessionStorage.getItem('blockNum' );
+    let contractName = sessionStorage.getItem('contractName' );
+    let netId = sessionStorage.getItem('netId' );
 
     //念のため"latest"な現在ブロック入手
-    let nowBlock  =  await web3.eth.getBlock("latest");
-    console.log('block data is ', nowBlock);
-    let nowUnixTime = sessionStorage.getItem('nowUnixTime' );
+    let authBlock = sessionStorage.setItem('authBlock' );
+    console.log('auth block data is ', authBlock);
+
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    let time = now.toLocaleString();
+    let authUnixTime = sessionStorage.setItem('authUnixTime' );
+
+
 
 
     //コンテンツ
@@ -116,7 +118,8 @@ window.setBookMarkFile = async () => {
     let userComment = "OK...";
     //閲覧者、保有者の余白note
     let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
-
+    //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
+    let time = now.toLocaleString();
 
 
    
@@ -129,9 +132,9 @@ window.setBookMarkFile = async () => {
         //auth block chain - contract data
         "contractName"       : contractName, 
         "netId"              : netId,//network data    
-        "nowblock"           : nowBlock,//network data  
+        "authblock"          : authBlock,//network data  
         "blockNumber"        : bn, //time data
-        "nowUnixTime"        : nowUnixTime,//auth time data
+        "authUnixTime"       : authUnixTime,//auth time data
 
         //contents viewer data
         "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
