@@ -24,17 +24,14 @@
 <!-- web3 js (LGPL-3.0のため、コンテンツ含む単一実行ファイルのソースコードを公開しなければいけない)    -->
 <script type="text/javascript" src="./web3.min.js"></script>
 
-<!--Ethers js (MIT　こちらを採用したい。)-->
-<script type="text/javascript" src="./ethers.umd.min.js" ></script>
-
 <!--QR code write (MIT) -->
+<script type="text/javascript" src="./qrcode.min.js"></script>
 <!--QR にアドレスNFTIDOTPを書き込み、表示させる。画面を複写するとQRコードも取り込むことに。 -->
-
 <!--あるいはアドレスをQRコード化してリーダー部に置くといい。
 秘密鍵だとやりすぎ。しかし秘密鍵を表示させればスクリーンキャプチャへの抑止力になる。アドレスの表示が妥当。
 ランダムにビューアの四隅にQRコードが出現するイメージ。-->
 
-<script type="text/javascript" src="./qrcode.min.js"></script>
+
 
 <!--  index.jsよりもよりも先に読み込み  -->
 <script type="text/javascript" src="./abiauth.js"></script>
@@ -189,14 +186,23 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
 
 </script>
 
-<hr>
-<h2>JavaScript code:</h2>
-<pre id="code"></pre>
-<script>
-  //document.getElementById('code').textContent = document.getElementById('script').text;//ソース表示
-</script>
 
-
-
+<footer>Author NZRI (https://github.com/NZRI-AZRI) "license": "non-free computer software , Proprietary" , "name": "Katusya Nishizawa" , "email": "nzri2azri@gmail.com"</footer>
+{
+    "name": "Crypto-bon(Crybon)",
+    "version": "1.0.0",
+    "description": "Local app of [web3-otp-contents-viewer]",
+    "main": "main.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": ["web3","otp","contents","viewer"],
+    "author": {
+      "name": "Katusya Nishizawa",
+      "email": "nzri2azri@gmail.com",
+      "url": "https://github.com/NZRI-AZRI"
+    },
+    "license": "non-free computer software , Proprietary"
+}
 </body>
 </html>
