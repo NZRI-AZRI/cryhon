@@ -325,7 +325,7 @@ window.getOtp = async () => {
 window.getBookMarkFile = async () => {
   let nftid = document.getElementById("nftidtoknowotp4").value;
   console.log('nft data is ', nftid );
-  downloadBookMarkFile(nftid);
+  await downloadBookMarkFile(nftid);
 }
 
 
