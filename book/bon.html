@@ -6,7 +6,8 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- !IMPORTANT! 認証確認     -->
-    <script type="text/javascript" src="./authCheck.js"></script>
+    <script type="text/javascript" src="authCheck.js"></script>
+
 
     <style type="text/css">
     /*pdf表示部分をを印刷させない*/
@@ -21,18 +22,12 @@
 
 <body>
 
-
 <div>
     <h1>ログイン後のコンテンツページです</h1><br>
 
     <span>
         <p>・戻る場合はこのボタンを押してください。</p>
         <INPUT type="button" onclick="history.back()" value="１つ前のページに戻る">
-        <br><br><br>
-        
-        <p>・公開栞ファイル作成を作成してください。ネットワーク遮断時でも制限付きで閲覧できます</p>
-        <INPUT type="button" onclick="setBookMarkFile()" value="公開栞ファイル作成">
-        <br><br><br>
 
     <h2>コンテンツ</h2>
     <p>ここにコンテンツを記述します。</p>
@@ -41,6 +36,7 @@
     </span>
     <br><br><br>
 </div>
+
 
 
 <h1>'PDF.js' example</h1>
@@ -77,7 +73,6 @@
     scale = 0.8,
     canvas = document.getElementById('the-canvas'),
     ctx = canvas.getContext('2d');
-  sessionStorage.setItem('pdfPage', pageNum );
 
 /**
  * Get page info from document, resize canvas accordingly, and render page.
@@ -133,7 +128,6 @@ function onPrevPage() {
     return;
   }
   pageNum--;
-  sessionStorage.setItem('pdfPage', pageNum );//
   queueRenderPage(pageNum);
 }
 document.getElementById('prev').addEventListener('click', onPrevPage);
@@ -146,7 +140,6 @@ function onNextPage() {
     return;
   }
   pageNum++;
-  sessionStorage.setItem('pdfPage', pageNum );//
   queueRenderPage(pageNum);
 }
 document.getElementById('next').addEventListener('click', onNextPage);
@@ -161,32 +154,16 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
   // Initial/first page rendering
   renderPage(pageNum);
 });
+</script>
 
-
+<hr>
+<h2>JavaScript code:</h2>
+<pre id="code"></pre>
+<script>
+  document.getElementById('code').textContent =
+      document.getElementById('script').text;
 </script>
 
 
-
-<!--メインスクリプト -->
-<script type="text/javascript" src="./bon.js"></script>
-
-
-<footer>Author NZRI (https://github.com/NZRI-AZRI) "license": "non-free computer software , Proprietary" , "name": "Katusya Nishizawa" , "email": "nzri2azri@gmail.com"</footer>
-{
-    "name": "Crypto-bon(Crybon)",
-    "version": "1.0.0",
-    "description": "Local app of [web3-otp-contents-viewer]",
-    "main": "main.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": ["web3","otp","contents","viewer"],
-    "author": {
-      "name": "Katusya Nishizawa",
-      "email": "nzri2azri@gmail.com",
-      "url": "https://github.com/NZRI-AZRI"
-    },
-    "license": "non-free computer software , Proprietary"
-}
 </body>
 </html>
