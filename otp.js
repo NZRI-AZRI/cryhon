@@ -511,7 +511,8 @@ form.myfile.addEventListener( 'change', function(e) {
           let json = JSON.parse( message );
           console.log( json );
 
-          let time = json.time
+          let time = json.time;
+          console.log(time);
           //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
           let timeSecret = secretKey + time + geneContractAddress;
           console.log(timeSecret);
