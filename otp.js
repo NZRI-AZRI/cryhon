@@ -317,7 +317,7 @@ window.getOtp = async () => {
 window.getBookMarkFile = async () => {
   let nftid = document.getElementById("nftidtoknowotp4").value;
   console.log('nft data is ', nftid );
-  await downloadBookMarkFile(nftid);
+  downloadBookMarkFile(nftid);
 }
 
 
@@ -331,7 +331,7 @@ window.getBookMarkFile = async () => {
 
 //公示栞 生成部分===(秘密鍵とは異なり、公示されてもトークンにはアクセスされない鍵を栞とする。)
 //book-mark file
-window.downloadBookMarkFile = async (nftid) => {
+async function downloadBookMarkFile(nftid) {
 
     //ユーザーのアドレス nftid totp
     console.log('nft data is ', myAccount , nftid );
@@ -364,9 +364,7 @@ window.downloadBookMarkFile = async (nftid) => {
     let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
     let time = now.toLocaleString();
-
-
-   
+    
     var jsondata = {
         //auth totp data
         "user-eoa-address"   : myAccount,
