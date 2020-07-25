@@ -503,8 +503,8 @@ form.myfile.addEventListener( 'change', function(e) {
 
             //※次に署名されたブックマークファイルが偽物か本物かを調べる。
 
-            console.log('uploadedfile-timestmphash is ' , uploadFile.timeSecretHash);
-            let time = uploadFile.time;  
+            console.log('uploadedfile-timestmphash is ' , JSON.stringify(uploadFile).timeSecretHash);
+            let time = JSON.stringify(uploadFile).time;  
             console.log('uploadedfile-time is ' , time);
 
             //UNIXベース年月日・認証時刻にシークレットを加えた例
