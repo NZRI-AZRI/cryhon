@@ -28,9 +28,6 @@ let authInstance; // instance
 var qrcode1;//QR code instance
 var qrcodeCount1 = 0;
 
-sessionStorage.setItem('authResult', 0 );//auth result セッションストレージ初期化
-sessionStorage.setItem('myAccount', 0 );
-
 var now = new Date();
 
 //web3 function==init　web3 初期化
