@@ -17,15 +17,17 @@
     }
     </style>
     
+    <script type="text/javascript" src="sha3.js"></script>
+    
 </head>
 
 
 <body>
 <!-- web3 js (LGPL-3.0のため、コンテンツ含む単一実行ファイルのソースコードを公開しなければいけない)    -->
-<script type="text/javascript" src="./web3.min.js"></script>
+<script type="text/javascript" src="web3.min.js"></script>
 
 <!--QR code write (MIT) -->
-<script type="text/javascript" src="./qrcode.min.js"></script>
+<script type="text/javascript" src="qrcode.min.js"></script>
 <!--QR にアドレスNFTIDOTPを書き込み、表示させる。画面を複写するとQRコードも取り込むことに。 -->
 <!--あるいはアドレスをQRコード化してリーダー部に置くといい。
 秘密鍵だとやりすぎ。しかし秘密鍵を表示させればスクリーンキャプチャへの抑止力になる。アドレスの表示が妥当。
@@ -176,11 +178,11 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
 
 
 <!--  index.jsよりもよりも先に読み込み  -->
-<script type="text/javascript" src="./abiauth.js"></script>
-<script type="text/javascript" src="./abigene.js"></script>
+<script type="text/javascript" src="abiauth.js"></script>
+<script type="text/javascript" src="abigene.js"></script>
 
 <!--メインスクリプト -->
-<script type="text/javascript" src="./bon.js"></script>
+<script type="text/javascript" src="bon.js"></script>
 
 
 <footer>Author NZRI (https://github.com/NZRI-AZRI) "license": "non-free computer software , Proprietary" , "name": "Katusya Nishizawa" , "email": "nzri2azri@gmail.com"</footer>

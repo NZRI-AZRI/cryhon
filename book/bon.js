@@ -63,27 +63,6 @@ if (!web3prov){
 
 
 //公開栞 生成部分=======================(秘密鍵とは異なり、公開されてもトークンにはアクセスされない鍵を栞とする。)
-
-//get cert TOTP 7number  
-window.getCertifiedTotp7Num = async () => {
-
-	let otp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
-
-	let authResult = false ;
-
-	authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid, otp7num).call({from: myAccount});
-	console.log('auth Result is ', authResult);
-
-	if (authResult == true) {
-		return otp7num;	
-    }
-    if (authResult == false) {
-		return 0;	
-	}
-}
-
-
-
 //set book mark file
 window.setBookMarkFile = async () => {
 
@@ -150,11 +129,17 @@ window.setBookMarkFile = async () => {
     }
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
+    //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
     let signatureObject = web3.eth.accounts.sign(jsondata, privateKey);
     
+    //jsSHA.js( BSD-3-Clause License )を暫定的に利用。
+    //let signatureObject;
+
+
+
     //output json file
     // 保存するJSONファイルの名前
-    const fileName = "bookmark0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1.json";
+    const fileName = userName+"bookmark0x300b-83F1.json";
     
     // データをJSON形式の文字列に変換する。
     const data = JSON.stringify(signatureObject);
