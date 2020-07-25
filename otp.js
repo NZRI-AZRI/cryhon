@@ -424,11 +424,16 @@ async function downloadBookMarkFile() {
 window.getBookMarkFile = async () => {
   let nftid = document.getElementById("nftidtoknowotp4").value;
   if (!nftid){
-    return window.alert("nftid is empty")
+    return window.alert("nftid is empty");
   }
   downloadBookMarkFile();
 }
 
+async function web3RecoverSignAddress(uploadFile){
+
+  return await web3.eth.accounts.recover(uploadFile);
+
+}
 
 //公示栞読み込み部分uploadBookMarkFile 
 //load csv inputfile (private key file and websocketURI)
@@ -451,7 +456,8 @@ form.myfile.addEventListener( 'change', function(e) {
         let uploadFile = JSON.parse(reader.result);
 
         //web3.jsによりサインを復号化する
-        let recoverSign = web3.eth.accounts.recover(uploadFile);
+        let recoverSign = web3RecoverSignAddress(uploadFile);
+
         console.log( 'recover is ',recoverSign );  
         /**
          * 復号化した後の戻り値がアカウントと同じならば秘密鍵とブックマークファイルは一致しているのでnftの持ち主であったことが分かる。
