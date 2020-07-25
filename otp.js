@@ -387,8 +387,11 @@ async function downloadBookMarkFile() {
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
     console.log('json data is ', jsondata);
 
+    let messageStr = JSON.parse(jsondata);
 
-    let signatureObject = await web3.eth.accounts.sign(jsondata, privateKey);
+
+
+    let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
     console.log('sign data(bookmark data) is ', signatureObject);
  
     //blob download
