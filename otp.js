@@ -120,15 +120,15 @@ window.addEventListener('load', async function() {
 //Auto login  TOTP 7number  
 window.autoLoginBy7num = async () => {
 
-	let nftid = document.getElementById("nftidtoknowotp4").value;
-  
+  let nftid = document.getElementById("nftidtoknowotp4").value;
+  sessionStorage.setItem('myNftId', document.getElementById("nftidtoknowotp4").value );
+  sessionStorage.setItem('totp7' , await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount}));
 	if (!nftid){
 	  return window.alert("nftid is empty")
 	}
 	let otp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
 
 	let authResult = false ;
-
 	authResult =  await authInstance.methods.authTotpRn7Num(myAccount, nftid, otp7num).call({from: myAccount});
 	console.log('auth Result is ', authResult);
 
@@ -136,7 +136,6 @@ window.autoLoginBy7num = async () => {
 		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
 		sessionStorage.setItem('authResult', 1 );
     sessionStorage.setItem('myAccount', myAccount );
-    sessionStorage.setItem('myNftId', nftid );
 
     //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
     sessionStorage.setItem('blockNum'    , await web3.eth.getBlockNumber() );
