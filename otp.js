@@ -398,10 +398,10 @@ async function downloadBookMarkFile() {
     
     var blob = new Blob(
       [JSON.stringify(signatureObject)],
-      { type: 'application\/json' }
+      { type: 'application/json' }
     );    
     console.log('blob is ', blob);
-    
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
