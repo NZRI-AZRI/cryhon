@@ -26,12 +26,10 @@
 */
 
 
-
-
-
 //宣言
 let privateKey;
 var prov;
+
 
 //セッションストレージ初期化
 sessionStorage.setItem('prov',       0 );
@@ -119,7 +117,6 @@ window.setKey = async () => {
     sessionStorage.setItem('privateKey@', privateKey);
 
     document.getElementById("settingResult").innerText="読み込みました  setting saved";
-
 };
 
 //goto otp page

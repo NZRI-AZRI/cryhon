@@ -282,31 +282,6 @@
     <br><br><br>
 </div>
 
-<!--チケット時刻式　７桁　ワンタイムパスワード バーコード
-getTkTotpRn7Num
-つけ忘れたgetTkOtp7Numを利用し、トークンIDとトークン固有パスワードの6桁を使いバーコードに記録できる。
-JANコードは13桁または8桁まで、1,000,000 + 1,234,567
-
-★様々なコード体系に対応 6000-3000円のUSBバーコードスキャナPOS
-初期設定で、JANコード（市販の商品等）、NW-7（宅配便の送り状等）、Code39、Code128（社内伝票等）などの読み取りが可能
-JANでは少ないのでCODE39を使いたい。NZRI-T1234500-P1234567のような文字でも記入できる。
-
-js
-
-$(function(){
-
-   $("#barcode").barcode("1234567890123", "ean13");
-
-});
-
-html
-    <span>
-        <div class="box7">
-        <button onclick="getTkTotp7num()">Auth your OTP and go to next page</button>
-        <div id="barcode"></div>
-    </span>
--->
-
 
 <!--  index.jsよりもよりも先に読み込み  -->
 <script type="text/javascript" src="./abiauth.js"></script>
@@ -331,7 +306,6 @@ html
     <p>Ethereumネットワークを使用。(OpenSorceLicense)  </p>
     <p>ERC721コードのベース部分はopen-zeppelin-contract(MIT License)を使用。 </p>
     <p>web3.js(GPL3 License) をイーサリアムアクセスに利用。</p>
-    <p>jquery.jsを使用。 </p>
     <p>qrcode.js（MIT License　https://davidshimjs.github.io/qrcodejs/）を使用。 </p>
     <p>QRコードはデンソーウェーブ社の登録商標です。 </p>
 </div>
