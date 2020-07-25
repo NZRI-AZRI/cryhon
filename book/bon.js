@@ -100,7 +100,7 @@ window.setBookMarkFile = async () => {
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
- 
+    console.log('json data is ', jsondata);
     
     //jsSHA.js( BSD-3-Clause License )を暫定的に利用。HMAC-SHA-512
     const shaObj = new jsSHA("SHA-512", "TEXT", {
@@ -119,17 +119,6 @@ window.setBookMarkFile = async () => {
     // データをJSON形式の文字列に変換する。
     const data = JSON.stringify(signatureObject);
     
-    // HTMLのリンク要素を生成する。
-    const link = document.createElement("a");
-    
-    // リンク先にJSON形式の文字列データを置いておく。
-    link.href = "data:text/plain," + encodeURIComponent(data);
-    
-    // 保存するJSONファイルの名前をリンクに設定する。
-    a.download = fileName;
-    
-    // ファイルを保存する。
-    a.click();
 }
 
 /*
