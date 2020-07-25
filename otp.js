@@ -457,9 +457,9 @@ form.myfile.addEventListener( 'change', function(e) {
         let uploadFile = JSON.parse(reader.result);
 
         //web3.jsによりサインを復号化する
-        let recoverSign = web3RecoverSignAddress(uploadFile);
+        let recoverSign = await web3RecoverSignAddress(uploadFile);
 
-        console.log( 'recover is ', recoverSign );  
+        console.log( 'recover is ', recoverSign);  
         /**
          * 復号化した後の戻り値がアカウントと同じならば秘密鍵とブックマークファイルは一致しているのでnftの持ち主であったことが分かる。
          * 持ち主の栞を持っているので10分のログイン権限を付与する。
