@@ -30,7 +30,13 @@ var qrcodeCount1 = 0;
 var now = new Date();
 
 
-
+/*
+//------------------------------------------------
+//Author
+//1.Code by NZRI. Katsuya Nishizawa.
+//2020-07-25
+//------------------------------------------------
+*/
 
 //公開栞 生成部分=======================(秘密鍵とは異なり、公開されてもトークンにはアクセスされない鍵を栞とする。)
 //set book mark file
@@ -120,21 +126,3 @@ window.setBookMarkFile = async () => {
     const data = JSON.stringify(signatureObject);
     
 }
-
-/*
-window.recoverBookMarkFile = async (signatureObject) => {
-    //recoverが成功したらコンテンツページに遷移する。
-    if( web3.eth.accounts.recover(signatureObject)==sessionStorage.getItem('myAccount') ){
-        //セッション記録
-        //sessionStorage.getItem('key') 取得
-        //sessionStorage.setItem('key', 'value');
-        //trueフラグを保存。遷移先のページがあるとき、そこで使う。
-        sessionStorage.setItem('authResult', 1 );
-        sessionStorage.setItem('myAccount', myAccount );
-        sessionStorage.setItem('myNftId', nftid );
-        sessionStorage.setItem('bookMark@', 10 );
-        //ページ遷移
-        window.location.href = './book/bon.html'; 
-  }
-}
-*/
