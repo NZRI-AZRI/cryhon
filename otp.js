@@ -327,8 +327,9 @@ window.getOtp = async () => {
 
 //公示栞 生成部分===(秘密鍵とは異なり、公示されてもトークンにはアクセスされない鍵を栞とする。)
 //book-mark file
-async function downloadBookMarkFile(nftid) {
+async function downloadBookMarkFile() {
 
+    let nftid = document.getElementById("nftidtoknowotp4").value;
     //ユーザーのアドレス nftid totp
     console.log('nft data is ', myAccount , nftid );
 
@@ -412,6 +413,8 @@ window.uploadBookMarkFile = async () => {
 
 window.getBookMarkFile = async () => {
   let nftid = document.getElementById("nftidtoknowotp4").value;
-  console.log('nft data is ', nftid );
-  downloadBookMarkFile(nftid);
+  if (!nftid){
+    return window.alert("nftid is empty")
+  }
+  downloadBookMarkFile();
 }
