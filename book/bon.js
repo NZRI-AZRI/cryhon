@@ -97,11 +97,11 @@ window.setBookMarkFile = async () => {
     let netId = sessionStorage.getItem('netId' );
 
     //念のため"latest"な現在ブロック入手
-    let authBlock = sessionStorage.setItem('authBlock' );
+    let authBlock = sessionStorage.getItem('authBlock' );
     console.log('auth block data is ', authBlock);
 
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    let authUnixTime = sessionStorage.setItem('authUnixTime' );
+    let authUnixTime = sessionStorage.getItem('authUnixTime' );
 
 
 
