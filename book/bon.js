@@ -4,6 +4,7 @@
 //privateKey - wssUri
 let privateKey= sessionStorage.getItem('privateKey@');
 let web3prov = sessionStorage.getItem('prov');
+
 //nft data  call totp function
 let myAccount = sessionStorage.getItem('myAccount' );
 let nftid = sessionStorage.getItem('myNftId');
@@ -17,10 +18,6 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 let web3;
 let account ;//coinbase
 let wallet;
-
-var nonceCount; //nonnce (global var)
-var gasPri;
-var gasLim;
 
 let geneInstance; // instance
 let authInstance; // instance
@@ -90,7 +87,7 @@ window.setBookMarkFile = async () => {
     let myAccount = sessionStorage.getItem('myAccount');
     let nftid = sessionStorage.getItem('myNftId');
     //let totp7num = await getCertifiedTotp7Num();
-    let totp7num = await geneInstance.methods.getTotpRn7Num(nftid).call({from: myAccount});
+    let totp7num = sessionStorage.getItem('totp7');
 
     console.log('nft data is ', myAccount , nftid , totp7num);
     
@@ -102,46 +99,47 @@ window.setBookMarkFile = async () => {
     //念のため"latest"な現在ブロック入手
     let nowBlock  =  await web3.eth.getBlock("latest");
     console.log('block data is ', nowBlock);
-
+    let nowUnixTime = sessionStorage.getItem('nowUnixTime' );
     //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
-    let nowUnixTime = now.toLocaleString();
+    let time = now.toLocaleString();
 
 
     //コンテンツ
     //コンテンツ固有の秘密シード値
-    let contentsKey = "Cryhon0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1クリホンCryhonとクリボンCrybonは同じ1Ed13902e42592f8a3631793D39B74e48aA6D558クリホン";
+    let contentsKey = "CryhonISBN:0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
     //既読のページの番号、セッション番号、時間数
     //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
     let pageNumber = sessionStorage.getItem('pdfPage');
     //閲覧した人の名前
     let userName = "kn";
     //ユーザーの読書コメント、しおり
-    let userComment = "OK";
+    let userComment = "OK...";
     //閲覧者、保有者の余白note
-    let note = "cryhon-crybon";
+    let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
 
 
 
    
     var jsondata = {
-        //totp auth data
+        //auth totp data
         "user-eoa-address"   : myAccount,
         "nft-id"             : nftid, 
         "TOTP-7digit"        : totp7num,     
 
-        //block chain - contract data
+        //auth block chain - contract data
         "contractName"       : contractName, 
         "netId"              : netId,//network data    
         "nowblock"           : nowBlock,//network data  
         "blockNumber"        : bn, //time data
-        "nowUnixTime"        : nowUnixTime,//time data
+        "nowUnixTime"        : nowUnixTime,//auth time data
 
         //contents viewer data
-        "contentsKey"        : contentsKey, 
+        "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
         "pageNumber"         : pageNumber,        
         "userName"           : userName,
         "userComment"        : userComment,
-        "note"               : note
+        "note"               : note,
+        "time"               : time //unixTime of makingBookmarkFile
     }
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
