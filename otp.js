@@ -395,11 +395,11 @@ async function downloadBookMarkFile() {
     console.log('sign data(bookmark data) is ', signatureObject);
  
     //blob download
-    const blob = new Blob([signatureObject], {type: 'text/plain'});
+    const blob = new Blob(signatureObject, {type: 'text/plain'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
-    a.download = 'cryhonBookmark.json';
+    a.download = 'cryhonBookmark.txt';
     a.href = url;
     a.click();
     a.remove();
