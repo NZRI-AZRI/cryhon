@@ -431,8 +431,9 @@ window.getBookMarkFile = async () => {
 
 async function web3RecoverSignAddress(uploadFile){
 
-  return await web3.eth.accounts.recover(uploadFile);
+  let recover = web3.eth.accounts.recover(uploadFile);
 
+  return recover ;
 }
 
 //公示栞読み込み部分uploadBookMarkFile 
@@ -480,7 +481,7 @@ form.myfile.addEventListener( 'change', function(e) {
             //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
             sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
             sessionStorage.setItem('myAccount', myAccount );
-
+            console.log( "auth is true." );  
             //ページ遷移
             window.location.href = './book/bon.html'; 
             return false;	
