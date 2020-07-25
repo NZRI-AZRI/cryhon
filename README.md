@@ -10,17 +10,8 @@ GitLab ver is https://gitlab.com/katsuya_nishizawa/cryhon-crybon.
 
 BON or HON mean book(本) in japanese.
 
-Licence is UNLICENSE. Only I can use this code now.
-(ライセンスはUNLICENSEです。このコードを使用できるのは私だけです。)
-
-In this text. "Licence is UNLICENSE" means "NOT Free software. People have unlicense. People have unlicensed."
-In this text. "Licence is UNLICENSE" means "NOT Free software. "
-(このテキストで。 「ライセンスはライセンスではありません」とは、「フリーソフトウェアではないことを意味します。)
-
-※node.jsのpackage.jsonの項目で、"License"の項目をどのフリーソフトウェアライセンスにも許可しない意味でUNLICENSEとしたものです。
-意図したライセンスはマイクロソフト社のオペレーティングソフトと同じくプロプライエタリソフトウェアであり、非フリーソフトウェアです。
-ただしソースコードは適宜、必要な部分は公開されます。
-LGPL3ライセンスを含むモジュールを使うので、本の内容となるコンテンツ以外の部分についてはソースコードは公開されます。
+Only I can use this code now.
+(このコードを使用できるのは私だけです。)
 
 The copyright of the code belongs to Katsuya Nishizawa.
 (コードの著作権はKatsuya Nishizawaに帰属します。)
