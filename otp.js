@@ -508,11 +508,12 @@ form.myfile.addEventListener( 'change', function(e) {
           console.log( message );
 
           // JSONをオブジェクトデータの形式に変換
-          let json = JSON.parse( message );
-          console.log( json );
+          let obj = JSON.parse( message );
+          console.log( obj );
 
-          let time = json.time;
-          console.log(time);
+          let time = obj.time;
+          console.log(obj.time);
+
           //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
           let timeSecret = secretKey + time + geneContractAddress;
           console.log(timeSecret);
