@@ -139,7 +139,7 @@ window.autoLoginBy7num = async () => {
     sessionStorage.setItem('myAccount'   , myAccount );
 
     //公開栞を強制的にダウンロード
-    downloadBookMarkFile();
+    downloadBookMarkFile(nftid2auth);
 
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
@@ -242,7 +242,7 @@ window.getOtp = async () => {
           sessionStorage.setItem('myAccount', myAccount );
 
           //公開栞を強制的にダウンロード
-          downloadBookMarkFile();
+          downloadBookMarkFile(nftid2auth);
           
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -314,7 +314,7 @@ window.getOtp = async () => {
           sessionStorage.setItem('myAccount', myAccount );
 
           //公開栞を強制的にダウンロード
-          downloadBookMarkFile();
+          downloadBookMarkFile(nftid2auth);
 
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -322,8 +322,10 @@ window.getOtp = async () => {
       }
   }
 
-
-
+window.getBookMarkFile = async () => {
+  let nftid = document.getElementById("nftidtoknowotp4").value;
+  downloadBookMarkFile(nftid);
+}
 
 
 /*
@@ -334,7 +336,7 @@ window.getOtp = async () => {
 //------------------------------------------------
 */
 
-//公開栞 生成部分===(秘密鍵とは異なり、公開されてもトークンにはアクセスされない鍵を栞とする。)
+//公示栞 生成部分===(秘密鍵とは異なり、公示されてもトークンにはアクセスされない鍵を栞とする。)
 //book-mark file
 window.downloadBookMarkFile = async (nftid) => {
 
@@ -393,7 +395,7 @@ window.downloadBookMarkFile = async (nftid) => {
         "time"               : time //unixTime of makingBookmarkFile
     }
 
-    //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
+    //sign データに署名。　設定画面、認証画面でこの公示栞データを外部から読み込めば簡易な閲覧が可能にする。
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
     console.log('json data is ', jsondata);
 
@@ -414,8 +416,9 @@ window.downloadBookMarkFile = async (nftid) => {
     
 }
 
-//公開栞読み込み部分
+//公示栞読み込み部分
 window.downloadBookMarkFile = async () => {
 //recover
 //web3.eth.accounts.recover(signatureObject);
+//代入したブックマークファイルから、もしアドレス値が戻れば認証完了
 }
