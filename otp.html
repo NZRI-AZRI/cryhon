@@ -141,16 +141,20 @@
             <input id="nftidtoknowotp4" type="number" placeholder="enter your valid nft tokenID" style="width:200px" />
             <button onclick="autoLoginBy7num()"> 自動ログイン</button>
 
-            <p>・ブックマークファイルを作成すると次回のログインに使えます　（実装中）</p>            
-            <button onclick="getBookMarkFile()"> ブックマークファイルを作る</button>  
+            <p>・ブックマークファイルを作成すると次回のログインに使えます。ボタンを押すとファイルがダウンロードされます</p>            
+            <button onclick="getBookMarkFile()"> トークンID入力後ブックマークファイルを作る</button>  
             <br><br><br>
 
             <!--しおり入力 -->
             <form name="myform">
-                <p>ブックマークファイルをアップロード　upload bookmark</p>
+                <p>ブックマークファイルをアップロード。　upload bookmark</p>
                 <input name="myfile" type="file" id="uploadBookMark" accept=".json"/>
+                <p>ブックマークファイルを読み込むと自動ログインできますが閲覧時間に制限をかけます。</p>
             </form>
             <br><br><br>
+            <!--
+                ここへ栞に記述する情報を入力する入力欄を設けたい
+            -->
         </span>
     </div>
 

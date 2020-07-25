@@ -75,68 +75,8 @@
             load csv :
             <input name="myfile" type="file" id="inputKeyUri" accept=".csv"/>
         </form>
-        <br>
-        <!--認証結果ファイルを入力、csvファイル、
-            
-            通常：秘密鍵とweb3.js-イーサリアムネットワークコントラクトによる認証。認証できたときタイムスタンプや秘密鍵とアプリと認証時のデータを基にした出力ファイルを保存させる。
-            非常時：ネットが使えないとき、秘密鍵と出力ファイルを用いて10分から数時間ぐらいの制約をかけて読める。10分ごとに終了する動作を行い、ユーザーの読書に制約を与える。
-            もしネットにつなげないローカル下でも本を制約をつけながら読めるようにする為のもの。
-            なお、秘密鍵と出力ファイルは対にならないと動作しない。
-            もし本を誰かに読ませるならば秘密鍵と出力ファイルを渡さないといけないが、それはアカウントの譲渡に当たる。
-            誰がカギを意図的に紛失させたかがわかるのでユーザーは鍵を不当に流すことはしたくないハズ。
-        -->
-
-        <!--
-            １．ユーザーの秘密鍵を入力とする。
-            ２．秘密鍵から公開鍵を算出し、公開鍵で、認証時のアプリ内部の共通鍵もしくは共通データとブロック番号、タイムスタンプなどをRSA暗号化。もしくは署名。
-            ３．暗号化、もしくは署名したファイルを、閲覧時の栞データ、ここえは”公開栞”データと呼称して出力する。なお栞には読者コメントなども含めていい。
-            ４．オフチェーン、オフラインにおいてもアプリシャットダウン時間に制約があるものの、秘密鍵と公開栞があれば閲覧できるようにする。
-            
-            web3.eth.accounts.sign(data, privateKey);
-            
-            Returns
-            Object: The signature object
-                message - String: The the given message.
-                messageHash - String: The hash of the given message.
-                r - String: First 32 bytes of the signature
-                s - String: Next 32 bytes of the signature
-                v - String: Recovery value + 27
-
-
-            秘密鍵を用いてデータに署名、
-            
-            ユーザーのアドレス
-            既読のページの番号、セッション番号、時間数
-            本などコンテンツ固有の秘密シード値
-            ユーザーの読書コメント
-            認証時刻、認証時のブロック番号
-            ブロックチェーンID、ブロック番号、コントラクト、NFT情報、TOTPコード
-            保有者の名前（任意）
-            備考、余白
-
-            以上の値を平文dataとし、
-            let signatureObject = web3.eth.accounts.sign(data, privateKey);//を実行し、
-            公開栞（signatureObject）として出力する。
-
-            =======================
-            web3.eth.accounts.recover(signatureObject);
-            Returns String: The Ethereum address used to sign this data.
-
-            signatureObjectを公開栞として出力されて保存される。
-            オフラインの非常時にはsignatureObjectを公開栞をアプリに読み取ってリカバーして、アドレスが帰ってきたら認証OKとする。
-            公開栞が秘密鍵によってリカバーされたらコンテンツへのログインを行う。
-            ただし、認証時のブロック番号が現在時刻より数カ月大きい時はアプリの動作時間を制限する。10分ぐらいで強制終了させる。
-
-        -->
-
-        <!--設定入力 csvファイルで初期設定-->
-        <form name="myform2">
-            load Output Book Mark :
-            <input name="myfile2" type="file" id="bookmarkInput" accept=".json"/>
-        </form>
-        <br>
-
-        <br>
+        
+        <br><br>
         <p>プロバイダアドレスの例：'wss://mainnet.infura.io/ws/v3/39a7b8b9d7924f8398xxxxxxxxxxxxab'</p>
         <p>WebsocketProvider使用。</p>
         <p>秘密鍵とweb3プロバイダアドレスはNode.js-ElectronのChromiumブラウザのsessionStrageに一時保存されます。</p>
