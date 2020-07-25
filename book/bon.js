@@ -100,16 +100,17 @@ window.setBookMarkFile = async () => {
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
-    let signatureObject = ;
+ 
     
     //jsSHA.js( BSD-3-Clause License )を暫定的に利用。HMAC-SHA-512
     const shaObj = new jsSHA("SHA-512", "TEXT", {
         hmacKey: { value: privateKey, format: "TEXT" },
     });
     shaObj.update(jsondata);
-    const hmacData = shaObj.getHash("HEX");
+    const hmac = shaObj.getHash("HEX");
+    console.log('hmac data is ', hmac);
 
-    console.log('hmac data is ', hmacData);
+    let signatureObject = jsondata + hmac;
 
     //output json file
     // 保存するJSONファイルの名前
