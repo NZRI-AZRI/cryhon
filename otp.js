@@ -138,9 +138,6 @@ window.autoLoginBy7num = async () => {
 		sessionStorage.setItem('authResult', 1 );
     sessionStorage.setItem('myAccount'   , myAccount );
 
-    //公開栞を強制的にダウンロード
-    downloadBookMarkFile(nftid2auth);
-
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
 		return false;	
@@ -241,8 +238,6 @@ window.getOtp = async () => {
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
 
-          //公開栞を強制的にダウンロード
-          downloadBookMarkFile(nftid2auth);
           
           //ページ遷移
           window.location.href = './book/bon.html'; 
@@ -312,9 +307,6 @@ window.getOtp = async () => {
           //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
           sessionStorage.setItem('authResult', 1 );
           sessionStorage.setItem('myAccount', myAccount );
-
-          //公開栞を強制的にダウンロード
-          downloadBookMarkFile(nftid2auth);
 
           //ページ遷移
           window.location.href = './book/bon.html'; 
