@@ -41,10 +41,7 @@ window.initApp = async () => {
     myAccount = account.address;
 
     console.log('myAccount' , myAccount );
-    document.getElementById("key2adr").innerText = myAccount;
-    document.getElementById("g-cont").innerText = geneContractAddress;
-    document.getElementById("a-cont").innerText = authContractAddress;
-
+    
     //instance
     geneInstance = new web3.eth.Contract(abigene, geneContractAddress);
     authInstance = new web3.eth.Contract(abiauth, authContractAddress);
