@@ -71,6 +71,7 @@ form.myfile.addEventListener( 'change', function(e) {
     })
 })
 
+/*
 //load output file (public bookmark file json)
 var form2 = document.forms.myform2;
 form2.myfile2.addEventListener( 'change', function(e) {
@@ -93,6 +94,7 @@ form2.myfile2.addEventListener( 'change', function(e) {
 
     })
 })
+*/
 
 
 
