@@ -8,7 +8,9 @@ let web3prov = sessionStorage.getItem('prov');
 //nft data  call totp function
 let myAccount = sessionStorage.getItem('myAccount' );
 let nftid = sessionStorage.getItem('myNftId');
+let totp7num = sessionStorage.getItem('totp7');
 
+console.log('nft data is ', myAccount , nftid , totp7num);
 
 //rinkeby contract
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
@@ -27,39 +29,7 @@ var qrcodeCount1 = 0;
 
 var now = new Date();
 
-//web3 function==init　web3 初期化
-window.initApp = async () => {
-    
-    //privateKey - wssUri
-    privateKey= sessionStorage.getItem('privateKey@');
-    web3prov = sessionStorage.getItem('prov');
 
-    //wssプロバイダセット
-    web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
-    // privateKeyをインポート・セット
-    account = web3.eth.accounts.privateKeyToAccount(privateKey);
-    // JSONを再びオブジェクトデータの形式に変換
-    myAccount = account.address;
-
-    console.log('myAccount' , myAccount );
-
-    //instance
-    geneInstance = new web3.eth.Contract(abigene, geneContractAddress);
-    authInstance = new web3.eth.Contract(abiauth, authContractAddress);
-};
-
-//load
-window.addEventListener('load', async function() {
-//key prov が設定されているか？
-if (!privateKey){
-    return window.alert("key is empty")
-}
-if (!web3prov){
-    return window.alert("web3prov is empty")
-}
-    //初期化
-    initApp();
-});
 
 
 //公開栞 生成部分=======================(秘密鍵とは異なり、公開されてもトークンにはアクセスされない鍵を栞とする。)
@@ -130,12 +100,16 @@ window.setBookMarkFile = async () => {
 
     //sign データに署名。　設定画面、認証画面でこの公開栞データを外部から読み込めば簡易な閲覧が可能にする。
     //本来は右記のコードを使いたいが、諸事情により外部モジュールを使う。
-    let signatureObject = await web3.eth.accounts.sign(jsondata, privateKey);
+    let signatureObject = ;
     
-    //jsSHA.js( BSD-3-Clause License )を暫定的に利用。
-    //let signatureObject;
+    //jsSHA.js( BSD-3-Clause License )を暫定的に利用。HMAC-SHA-512
+    const shaObj = new jsSHA("SHA-512", "TEXT", {
+        hmacKey: { value: privateKey, format: "TEXT" },
+    });
+    shaObj.update(jsondata);
+    const hmacData = shaObj.getHash("HEX");
 
-
+    console.log('hmac data is ', hmacData);
 
     //output json file
     // 保存するJSONファイルの名前
