@@ -395,7 +395,7 @@ async function downloadBookMarkFile() {
     console.log('sign data(bookmark data) is ', signatureObject);
  
     //blob download
-    var blob = new Blob([ content ], { "type" : "text/plain" });
+    var blob = new Blob([ JSON.stringify(signatureObject) ], { "type" : "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
