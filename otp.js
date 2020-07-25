@@ -38,10 +38,6 @@ let account ;//coinbase
 let myAccount;//eth address
 let wallet;
 
-var nonceCount; //nonnce (global var)
-var gasPri;
-var gasLim;
-
 let geneInstance; // instance
 let authInstance; // instance
 
@@ -53,8 +49,6 @@ var qrcode3;
 var qrcodeCount3 = 0;
 
 sessionStorage.setItem('authResult', 0 );//auth result セッションストレージ初期化
-sessionStorage.setItem('myAccount', 0 );
-sessionStorage.setItem('myNftId', 0 );
 
 var now = new Date();
 
@@ -143,6 +137,19 @@ window.autoLoginBy7num = async () => {
 		sessionStorage.setItem('authResult', 1 );
     sessionStorage.setItem('myAccount', myAccount );
     sessionStorage.setItem('myNftId', nftid );
+
+    //ブロックチェーンID、認証時のブロック番号(totpブロック番号)、コントラクト情報
+    sessionStorage.setItem('blockNum'    , await web3.eth.getBlockNumber() );
+    sessionStorage.setItem('contractName', await geneInstance.methods.name().call() );
+    sessionStorage.setItem('netId'       , await web3.eth.net.getId() );
+
+    //念のため"latest"な現在ブロック入手
+    sessionStorage.setItem('nowBlock'    , await web3.eth.getBlock("latest") );
+    console.log('block data is ', nowBlock);
+
+    //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
+    sessionStorage.setItem('nowUnixTime' , now.toLocaleString() );
+
 		//ページ遷移
 		window.location.href = './book/bon.html'; 
 		return false;	
@@ -327,7 +334,7 @@ window.getOtp = async () => {
 //------------------------------------------------
 //Author
 //1.Code by NZRI. Katsuya Nishizawa.
-//2020-07-12
+//2020-07-25
 //------------------------------------------------
 */
 
