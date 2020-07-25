@@ -23,6 +23,9 @@
 let privateKey= sessionStorage.getItem('privateKey@');
 let web3prov = sessionStorage.getItem('prov');
 
+//コンテンツ
+//コンテンツ固有の秘密シード値の例
+const secretKey = "Cryhonbon:0x0723";
 
 //rinkeby contract
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
@@ -352,8 +355,9 @@ async function downloadBookMarkFile() {
         let contractName =  await geneInstance.methods.name().call();
 
         //コンテンツ
-        //コンテンツ固有の秘密シード値
+        //コンテンツ固有の秘密シード値の例
         let contentsKey = "CryhonISBN:0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
+        //冒頭で定義 secretKey = "Cryhonbon:0x0723";
 
         //既読のページの番号、セッション番号、時間数
         //このページのアドレス、PDFファイルの現在ページ、MP3-MP4ファイルなどの再生時刻最大値等を想定
@@ -367,6 +371,21 @@ async function downloadBookMarkFile() {
         let note = "cryhon-crybon_クリホンCryhonとクリボンCrybonは同じ";
         //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
         let time = now.toLocaleString();
+
+        //UNIXベース年月日・認証時刻にシークレットを加えた例
+        let timeSecret = secretKey + time + geneContractAddress;
+        //let timeSecret = secretKey + time + myAccount + nftid + totp7 + contractName + geneContractAddress;
+        console.log(timeSecret);
+
+        async function digestMessage(message) {
+          const encoder = new TextEncoder();
+          const data = encoder.encode(message);
+          const hash = await crypto.subtle.digest('SHA-256', data);
+          return hash;
+        }
+        
+        const timeSecretHash  = await digestMessage(timeSecret);
+        console.log(timeSecretHash);
 
         var jsondata = {
             //auth totp data
@@ -385,7 +404,8 @@ async function downloadBookMarkFile() {
             "userName"           : userName,
             "userComment"        : userComment,
             "note"               : note,
-            "time"               : time //unixTime of makingBookmarkFile
+            "time"               : time, //unixTime of makingBookmarkFile
+            "timeSecretHash"     : timeSecretHash // ブックマーク認証検証用
         }
 
         //sign データに署名。　設定画面、認証画面でこの公示栞データを外部から読み込めば簡易な閲覧が可能にする。
@@ -456,7 +476,7 @@ form.myfile.addEventListener( 'change', function(e) {
         console.log( JSON.parse(reader.result) );  
         let uploadFile = JSON.parse(reader.result);
 
-        //web3.jsによりサインを復号化する
+        //web3.jsにより署名付きブックマークファイルを復号化する
         let recoverSign = await web3RecoverSignAddress(uploadFile);
 
         console.log( 'recover is ', recoverSign);  
@@ -482,14 +502,41 @@ form.myfile.addEventListener( 'change', function(e) {
          * クリエイターが作ったものが忘れ去られるのがいいのか、残ることがいいのかはクリエイターの判断による。
          * この機能の付いたNFTとこの機能がついていないNFTに分けて売り出すのも方法の一つ。
          */
+        
+        //署名されたブックマークファイルが持ち主の秘密鍵で正しく復号されるか確認。
         if(recoverSign==myAccount){
-            //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-            sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
-            sessionStorage.setItem('myAccount', myAccount );
-            console.log( "auth is true." );  
-            //ページ遷移
-            window.location.href = './book/bon.html'; 
-            return false;	
+
+            //※次に署名されたブックマークファイルが偽物か本物かを調べる。
+            
+            console.log('uploadedfile-timestmphash is ' , uploadFile.timeSecretHash);
+            let time = uploadFile.time;  
+            console.log('uploadedfile-time is ' , time);
+            //UNIXベース年月日・認証時刻にシークレットを加えた例
+            let timeSecret = secretKey + time + geneContractAddress;
+            console.log(timeSecret);
+    
+            async function digestMessage(message) {
+              const encoder = new TextEncoder();
+              const data = encoder.encode(message);
+              const hash = await crypto.subtle.digest('SHA-256', data);
+              return hash;
+            }
+            const timeSecretHash  = await digestMessage(timeSecret);
+            console.log(timeSecretHash);
+
+            //読み込まれたブックマーク内部の"timeSecretHash" と照合
+            //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
+            if(uploadFile.timeSecretHash == timeSecretHash){
+
+              //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
+              sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
+              sessionStorage.setItem('myAccount', myAccount );
+              console.log( "auth is true." );  
+
+              //ページ遷移
+              window.location.href = './book/bon.html'; 
+              return false;	
+            }
         }
     })
 })
