@@ -504,7 +504,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
 
           // オブジェクトデータをJSON化
-          let message = JSON.stringify( uploadfile.message );
+          let message = JSON.stringify( uploadFile.message );
           console.log( message );
 
           // JSONをオブジェクトデータの形式に変換
