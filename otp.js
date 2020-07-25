@@ -501,25 +501,28 @@ form.myfile.addEventListener( 'change', function(e) {
         //署名されたブックマークファイルが持ち主の秘密鍵で正しく復号されるか確認。
         if(recoverSign==myAccount){
 
-            //※次に署名されたブックマークファイルが偽物か本物かを調べる。
-            let json = JSON.stringify(uploadFile);
-            json = JSON.parse( json );
 
-            let time = json.time;  
-            console.log('uploadedfile-time is ' , time);
 
-            //UNIXベース年月日・認証時刻にシークレットを加えた例
-            let timeSecret = secretKey + time + geneContractAddress;
-            console.log('uploadedfile-timeS is ' ,timeSecret);
+          // オブジェクトデータをJSON化
+          let message = JSON.stringify( uploadfile.message );
+          console.log( message );
 
-            const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
-            shaObj.update(timeSecret);
-            const timeSecretHash = shaObj.getHash("HEX");
-            console.log('uploadedfile-timeSH ' ,timeSecretHash);
+          // JSONをオブジェクトデータの形式に変換
+          let json = JSON.parse( message );
+          console.log( json );
+
+          //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
+          let timeSecret = secretKey + time + geneContractAddress;
+          console.log(timeSecret);
+ 
+          const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+          shaObj.update(timeSecret);
+          const timeSecretHash = shaObj.getHash("HEX");
+          console.log(timeSecretHash);
 
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
             //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
-            if(json.timeSecretHash == timeSecretHash){
+            if(uploadfile.massege.timeSecretHash == timeSecretHash){
 
               //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
               sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
