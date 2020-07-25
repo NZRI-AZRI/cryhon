@@ -502,9 +502,10 @@ form.myfile.addEventListener( 'change', function(e) {
         if(recoverSign==myAccount){
 
             //※次に署名されたブックマークファイルが偽物か本物かを調べる。
+            let json = JSON.stringify(uploadFile);
+            json = JSON.parse( json );
 
-            console.log('uploadedfile-timestmphash is ' , JSON.stringify(uploadFile).timeSecretHash);
-            let time = JSON.stringify(uploadFile).time;  
+            let time = json.time;  
             console.log('uploadedfile-time is ' , time);
 
             //UNIXベース年月日・認証時刻にシークレットを加えた例
@@ -518,7 +519,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
             //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
-            if(uploadFile.timeSecretHash == timeSecretHash){
+            if(json.timeSecretHash == timeSecretHash){
 
               //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
               sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
