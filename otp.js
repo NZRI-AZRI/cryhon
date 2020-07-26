@@ -399,12 +399,10 @@ async function downloadBookMarkFile() {
             "user-eoa-address"   : myAccount,
             "nft-id"             : nftid, 
             "TOTP-7digit"        : totp7,     
-
             //auth block chain - contract data
             "contractName"       : contractName, 
             "netId"              : netId,//network data    
             "blockNumber"        : bn //time data
-
         }
 
         //sign データに署名。　設定画面、認証画面でこの公示栞データを外部から読み込めば簡易な閲覧が可能にする。
@@ -415,16 +413,28 @@ async function downloadBookMarkFile() {
         let messageStr = JSON.stringify(jsondata);
 
 
+        //web3で署名するとき
+        /*
+        //web3はネットワークがないと動かない恐れがある。なのでローカル用のライブラリでファイルを作りたい。
         let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
         console.log('sign data(bookmark data) is ', signatureObject);
+        */
+
+        //HMAC - jsSHAで署名するとき
+        const shaObj = new jsSHA("SHA-512", "TEXT", {
+          hmacKey: { value: privateKey , format: "TEXT" },
+        });
+        shaObj.update(messageStr);
+        const hmac = shaObj.getHash("HEX");
+        
+        //元の文書にHMACを添え、電子署名付き文章とする。RFC2104方式
+        let signatureObject = messageStr + hmac ; 
     
         //blob download
-        //var blob = new Blob([ JSON.stringify(signatureObject) ], { "type" : "text/plain" });
-        
         var blob = new Blob(
           [JSON.stringify(signatureObject)],
           { type: 'application/json' }
-        );    
+        );
         console.log('blob is ', blob);
 
         const url = URL.createObjectURL(blob);
@@ -448,12 +458,6 @@ window.getBookMarkFile = async () => {
   downloadBookMarkFile();
 }
 
-async function web3RecoverSignAddress(uploadFile){
-
-  let recover = await web3.eth.accounts.recover(uploadFile);
-
-  return recover ;
-}
 
 //公示栞読み込み部分uploadBookMarkFile 
 //load csv inputfile (private key file and websocketURI)
@@ -475,83 +479,93 @@ form.myfile.addEventListener( 'change', function(e) {
         console.log( JSON.parse(reader.result) );  
         let uploadFile = JSON.parse(reader.result);
 
-        //web3.jsにより署名付きブックマークファイルを復号化する
-        let recoverSign = await web3RecoverSignAddress(uploadFile);
-
-        console.log( 'recover is ', recoverSign);  
-        /**
-         * 復号化した後の戻り値がアカウントと同じならば秘密鍵とブックマークファイルは一致しているのでnftの持ち主であったことが分かる。
-         * 持ち主の栞を持っているので10分のログイン権限を付与する。
-         * ただしブックマーク時間からかけ離れている場合には減らす。(10分/n年)の閲覧時間に制限する。
-         * 仮想コンピュータやオフラインマシンでは時間を好きに設定できるはずだが、それでも10分が限界となる。
-         * 10分以上読みたければ再度アプリを起動しないといけない。
-         * 
-         * この機能は本を所有するという点で重要。常に分散台帳ネットワークが稼働していないと本が読めないのは所有権を侵害しかねない。
-         * 万一、例えば地震でネットワークが停電などで部分的に停止したとき、ノートパソコンから見たい本を見ようとしたとき、
-         * 秘密鍵は持っていて、本のデータはアプリに入っているのに本が見れないということになる。
-         * 
-         * それを解決するため、正常時に分散台帳ネットワークにログインしたとき、ブックマークファイルを作成し、
-         * 秘密鍵、ブックマークファイル、アプリの３つをセットでPCに保存してもらうことでオフラインでも閲覧できるようにする。
-         * 
-         * 緊急時に書物をある部分だけ読みたいときに使える試し読み機能である。
-         * この10分制限機能は動画ファイル、音楽ファイル、漫画本などをじっくり見たり聞いたり読んだりできないようにストレスを与える。
-         * 
-         * なおコンテンツの著作権者や版権元がこの関数の有無を決める。
-         * ただし、古書の様に人類の共通の財産としてデータを残す観点からはこの機能が推奨される。
-         * クリエイターが作ったものが忘れ去られるのがいいのか、残ることがいいのかはクリエイターの判断による。
-         * この機能の付いたNFTとこの機能がついていないNFTに分けて売り出すのも方法の一つ。
-         */
-        
-        //署名されたブックマークファイルが持ち主の秘密鍵で正しく復号されるか確認。
-        if(recoverSign==myAccount){
+//jsSHAにより署名付きブックマークファイルを復号化する
 
 
-//time　を参照しtime hashを構築
-          // オブジェクトデータをstr化
-          let message = JSON.stringify( uploadFile.message );
-          console.log( message );
 
 
-          //json.timesが使えないので文字をスライスしてtimes検索
-          //暫定的処置、力技
-          let timeSplit = message.split("TIME$");//"TIME$"で文字列分離
-          console.log( timeSplit );
+/*
+//web3.jsにより署名付きブックマークファイルを復号化する
+let recoverSign = await web3RecoverSignAddress(uploadFile);
+console.log( 'recover is ', recoverSign);  
 
-          console.log( timeSplit[1] );
-          let time = timeSplit[1];//時刻を取り出し
+//署名されたブックマークファイルが持ち主の秘密鍵で正しく復号されるか確認。
+if(recoverSign==myAccount){
 
-          //timeSecretを再構築する。
-          let timeSecret = secretKey + time + geneContractAddress;
-          console.log(timeSecret);
 
-          const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
-          shaObj.update(timeSecret);
-          let hashSlicer = "HASH$";
-          const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
+  //time　を参照しtime hashを構築
+  // オブジェクトデータをstr化
+  let message = JSON.stringify( uploadFile.message );
+  console.log( message );
 
-//time hash　を参照
-          //json.timesが使えないので文字をスライスしてtimes検索
-          let hashSplit = message.split("HASH$");//"HASH$"で文字列分離
-          console.log( hashSplit );
 
-          console.log( hashSplit[1] );
-          let hash = hashSplit[1];//timeSecretHashを取り出し
+  //json.timesが使えないので文字をスライスしてtimes検索
+  //暫定的処置、力技
+  let timeSplit = message.split("TIME$");//"TIME$"で文字列分離
+  console.log( timeSplit );
 
-          console.log(hash);
-          console.log(timeSecretHash);
-            //読み込まれたブックマーク内部の"timeSecretHash" と照合
-            //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
-            if(hash == timeSecretHash){
+  console.log( timeSplit[1] );
+  let time = timeSplit[1];//時刻を取り出し
 
-              //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-              sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
-              sessionStorage.setItem('myAccount', myAccount );
-              console.log( "auth is true." );  
+  //timeSecretを再構築する。
+  let timeSecret = secretKey + time + geneContractAddress;
+  console.log(timeSecret);
 
-              //ページ遷移
-              window.location.href = './book/bon.html'; 
-              return true;	
-            }
-        }
+  const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+  shaObj.update(timeSecret);
+  let hashSlicer = "HASH$";
+  const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
+
+  //time hash　を参照
+  //json.timesが使えないので文字をスライスしてtimes検索
+  let hashSplit = message.split("HASH$");//"HASH$"で文字列分離
+  console.log( hashSplit );
+
+  console.log( hashSplit[1] );
+  let hash = hashSplit[1];//timeSecretHashを取り出し
+
+  console.log(hash);
+  console.log(timeSecretHash);
+    //読み込まれたブックマーク内部の"timeSecretHash" と照合
+    //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
+    if(hash == timeSecretHash){
+
+      //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
+      sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
+      sessionStorage.setItem('myAccount', myAccount );
+      console.log( "auth is true." );  
+
+      //ページ遷移
+      window.location.href = './book/bon.html'; 
+      return true;	
+    }
+}
+*/
     })
 })
+
+
+
+
+/**
+ * 復号化した後の戻り値がアカウントと同じならば秘密鍵とブックマークファイルは一致しているのでnftの持ち主であったことが分かる。
+ * 持ち主の栞を持っているので10分のログイン権限を付与する。
+ * ただしブックマーク時間からかけ離れている場合には減らす。(10分/n年)の閲覧時間に制限する。
+ * 仮想コンピュータやオフラインマシンでは時間を好きに設定できるはずだが、それでも10分が限界となる。
+ * 10分以上読みたければ再度アプリを起動しないといけない。
+ * 
+ * この機能は本を所有するという点で重要。常に分散台帳ネットワークが稼働していないと本が読めないのは所有権を侵害しかねない。
+ * 万一、例えば地震でネットワークが停電などで部分的に停止したとき、ノートパソコンから見たい本を見ようとしたとき、
+ * 秘密鍵は持っていて、本のデータはアプリに入っているのに本が見れないということになる。
+ * 
+ * それを解決するため、正常時に分散台帳ネットワークにログインしたとき、ブックマークファイルを作成し、
+ * 秘密鍵、ブックマークファイル、アプリの３つをセットでPCに保存してもらうことでオフラインでも閲覧できるようにする。
+ * 
+ * 緊急時に書物をある部分だけ読みたいときに使える試し読み機能である。
+ * この10分制限機能は動画ファイル、音楽ファイル、漫画本などをじっくり見たり聞いたり読んだりできないようにストレスを与える。
+ * 
+ * なおコンテンツの著作権者や版権元がこの関数の有無を決める。
+ * ただし、古書の様に人類の共通の財産としてデータを残す観点からはこの機能が推奨される。
+ * クリエイターが作ったものが忘れ去られるのがいいのか、残ることがいいのかはクリエイターの判断による。
+ * この機能の付いたNFTとこの機能がついていないNFTに分けて売り出すのも方法の一つ。
+ */
