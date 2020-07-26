@@ -53,7 +53,7 @@ var qrcode3;
 var qrcodeCount3 = 0;
 
 sessionStorage.setItem('authResult', 0 );//auth result セッションストレージ初期化
-
+sessionStorage.setItem('myAccount',  0 );
 var now = new Date();
 
 
@@ -375,7 +375,7 @@ async function downloadBookMarkFile() {
         //UNIXベース年月日・認証時刻 64bit環境を使い、2038年問題を回避すること。Javascriptでは解決済み、geth-parity側はどうか？
         let times = timeSlicer + time + timeSlicer;
 
-        //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
+        //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う。myAccountを含むこと。
         let timeSecret = myAccount + secretKey + time + geneContractAddress;
         //let timeSecret = secretKey + time + myAccount + nftid + totp7 + contractName + geneContractAddress;
         console.log(timeSecret);
@@ -506,7 +506,7 @@ form.myfile.addEventListener( 'change', function(e) {
             console.log( timeSplit[1] );
             let time = timeSplit[1];//時刻を取り出し
 
-            //timeSecretを再構築する。
+            //timeSecretを再構築する。myAccountを含むこと。
             let timeSecret = myAccount + secretKey + time + geneContractAddress;
             console.log(timeSecret);
 
@@ -537,6 +537,9 @@ form.myfile.addEventListener( 'change', function(e) {
               //ページ遷移
               window.location.href = './book/bon.html'; 
               return true;	
+            }else{
+              console.log( "auth is false." ); 
+              return false;
             }
         }
     })
@@ -557,10 +560,12 @@ form.myfile.addEventListener( 'change', function(e) {
  * 秘密鍵は持っていて、本のデータはアプリに入っているのに本が見れないということになる。
  * 
  * それを解決するため、正常時に分散台帳ネットワークにログインしたとき、ブックマークファイルを作成し、
- * 秘密鍵、ブックマークファイル、アプリの３つをセットでPCに保存してもらうことでオフラインでも閲覧できるようにする。
+ * [秘密鍵、ブックマークファイル、アプリ] の３つをセットでPCに保存してもらうことでオフラインでも閲覧できるようにする。
  * 
  * 緊急時に書物をある部分だけ読みたいときに使える試し読み機能である。
  * この10分制限機能は動画ファイル、音楽ファイル、漫画本などをじっくり見たり聞いたり読んだりできないようにストレスを与える。
+ * 
+ * アプリがゲームソフトの場合、ユーザーは10分ごとにリセットを受ける。
  * 
  * なおコンテンツの著作権者や版権元がこの関数の有無を決める。
  * ただし、古書の様に人類の共通の財産としてデータを残す観点からはこの機能が推奨される。
