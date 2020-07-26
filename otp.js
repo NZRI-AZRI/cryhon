@@ -530,7 +530,7 @@ form.myfile.addEventListener( 'change', function(e) {
           const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
           shaObj.update(timeSecret);
           let hashSlicer = "HASH$";
-          const timeSecretHash = hashSlicer + shaObj.getHash("HEX") + hashSlicer;
+          const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
 
           //json.timesが使えないので文字をスライスしてtimes検索
           let hashSplit = message.split("HASH$");//"HASH$"で文字列分離
