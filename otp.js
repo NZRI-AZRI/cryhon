@@ -39,9 +39,16 @@ const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
 let web3;
 let account ;//coinbase
 let myAccount;//eth address
-let wallet;
-let nftid;
 
+let ethersWallet;//ethers.js wallet 
+// ウォレットを作成
+ethersWallet = new ethers.Wallet(privateKey);
+// ウォレットのアドレスを取得。web3で初期化しなくても秘密鍵からアドレス生成
+let myAccount = ethersWallet.address;
+console.log("ethers-address:", myAccount);
+
+
+let nftid;
 let geneInstance; // instance
 let authInstance; // instance
 
