@@ -539,63 +539,6 @@ form.myfile.addEventListener( 'change', function(e) {
               return true;	
             }
         }
-/*
-//web3.jsにより署名付きブックマークファイルを復号化する
-let recoverSign = await web3RecoverSignAddress(uploadFile);
-console.log( 'recover is ', recoverSign);  
-
-//署名されたブックマークファイルが持ち主の秘密鍵で正しく復号されるか確認。
-if(recoverSign==myAccount){
-
-
-  //time　を参照しtime hashを構築
-  // オブジェクトデータをstr化
-  let message = JSON.stringify( uploadFile.message );
-  console.log( message );
-
-
-  //json.timesが使えないので文字をスライスしてtimes検索
-  //暫定的処置、力技
-  let timeSplit = message.split("TIME$");//"TIME$"で文字列分離
-  console.log( timeSplit );
-
-  console.log( timeSplit[1] );
-  let time = timeSplit[1];//時刻を取り出し
-
-  //timeSecretを再構築する。
-  let timeSecret = secretKey + time + geneContractAddress;
-  console.log(timeSecret);
-
-  const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
-  shaObj.update(timeSecret);
-  let hashSlicer = "HASH$";
-  const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
-
-  //time hash　を参照
-  //json.timesが使えないので文字をスライスしてtimes検索
-  let hashSplit = message.split("HASH$");//"HASH$"で文字列分離
-  console.log( hashSplit );
-
-  console.log( hashSplit[1] );
-  let hash = hashSplit[1];//timeSecretHashを取り出し
-
-  console.log(hash);
-  console.log(timeSecretHash);
-    //読み込まれたブックマーク内部の"timeSecretHash" と照合
-    //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
-    if(hash == timeSecretHash){
-
-      //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-      sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
-      sessionStorage.setItem('myAccount', myAccount );
-      console.log( "auth is true." );  
-
-      //ページ遷移
-      window.location.href = './book/bon.html'; 
-      return true;	
-    }
-}
-*/
     })
 })
 
