@@ -519,12 +519,10 @@ form.myfile.addEventListener( 'change', function(e) {
 
           console.log( timeSplit[1] );
           let time = timeSplit[1];//時刻を取り出し
-          let timeSlicer = "TIME$";
 
           //UNIXベース年月日・認証時刻の要素を再構築
-          let times = timeSlicer + time + timeSlicer;
           //timeSecretを再構築する。
-          let timeSecret = secretKey + times + geneContractAddress;
+          let timeSecret = secretKey + time + geneContractAddress;
           console.log(timeSecret);
 //time hash
           const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
@@ -540,6 +538,7 @@ form.myfile.addEventListener( 'change', function(e) {
           let hash = hashSplit[1];//timeSecretHashを取り出し
 
           console.log(hash);
+          console.log(timeSecretHash);
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
             //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
             if(hash == timeSecretHash){
