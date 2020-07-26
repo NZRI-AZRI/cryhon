@@ -510,11 +510,10 @@ form.myfile.addEventListener( 'change', function(e) {
           // JSONをオブジェクトデータの形式に変換
           let obj = JSON.parse( message );
           console.log( obj );
-
-          let time = message.time;
+          let time = obj['time'];
           console.log(time);
 
-          //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
+          //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う
           let timeSecret = secretKey + time + geneContractAddress;
           console.log(timeSecret);
  
@@ -525,7 +524,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
             //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
-            if(message.timeSecretHash == timeSecretHash){
+            if(obj['timeSecretHash'] == timeSecretHash){
 
               //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
               sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
