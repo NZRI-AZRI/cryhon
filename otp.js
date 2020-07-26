@@ -549,7 +549,7 @@ form.myfile.addEventListener( 'change', function(e) {
               console.log( "auth is true." );  
 
               //ページ遷移
-              //window.location.href = './book/bon.html'; 
+              window.location.href = './book/bon.html'; 
               return true;	
             }
         }
