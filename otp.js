@@ -506,7 +506,7 @@ form.myfile.addEventListener( 'change', function(e) {
         if(recoverSign==myAccount){
 
 
-//time
+//time　を参照しtime hashを構築
           // オブジェクトデータをstr化
           let message = JSON.stringify( uploadFile.message );
           console.log( message );
@@ -520,16 +520,16 @@ form.myfile.addEventListener( 'change', function(e) {
           console.log( timeSplit[1] );
           let time = timeSplit[1];//時刻を取り出し
 
-          //UNIXベース年月日・認証時刻の要素を再構築
           //timeSecretを再構築する。
           let timeSecret = secretKey + time + geneContractAddress;
           console.log(timeSecret);
-//time hash
+
           const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
           shaObj.update(timeSecret);
           let hashSlicer = "HASH$";
           const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
 
+//time hash　を参照
           //json.timesが使えないので文字をスライスしてtimes検索
           let hashSplit = message.split("HASH$");//"HASH$"で文字列分離
           console.log( hashSplit );
