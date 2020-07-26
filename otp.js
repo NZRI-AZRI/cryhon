@@ -376,7 +376,7 @@ async function downloadBookMarkFile() {
         let times = timeSlicer + time + timeSlicer;
 
         //UNIXベース年月日・認証時刻にシークレットを加えた例　jsshaを使う？
-        let timeSecret = secretKey + time + geneContractAddress;
+        let timeSecret = myAccount + secretKey + time + geneContractAddress;
         //let timeSecret = secretKey + time + myAccount + nftid + totp7 + contractName + geneContractAddress;
         console.log(timeSecret);
 
@@ -507,7 +507,7 @@ form.myfile.addEventListener( 'change', function(e) {
             let time = timeSplit[1];//時刻を取り出し
 
             //timeSecretを再構築する。
-            let timeSecret = secretKey + time + geneContractAddress;
+            let timeSecret = myAccount + secretKey + time + geneContractAddress;
             console.log(timeSecret);
 
             const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
