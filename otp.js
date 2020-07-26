@@ -421,11 +421,11 @@ async function downloadBookMarkFile() {
         */
 
         //HMAC - jsSHAで署名するとき
-        const shaObj = new jsSHA("SHA-512", "TEXT", {
+        const shaMesObj = new jsSHA("SHA-512", "TEXT", {
           hmacKey: { value: privateKey , format: "TEXT" },
         });
-        shaObj.update(messageStr);
-        const hmac = shaObj.getHash("HEX");
+        shaMesObj.update(messageStr);
+        const hmac = shaMesObj.getHash("HEX");
         
         //元の文書にHMACを添え、電子署名付き文章とする。RFC2104方式
         let signatureObject = messageStr + hmac ; 
