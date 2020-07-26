@@ -519,6 +519,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
           console.log( timeSplit[1] );
           let time = timeSplit[1];//時刻を取り出し
+          let timeSlicer = "TIME$";
 
           //UNIXベース年月日・認証時刻の要素を再構築
           let times = timeSlicer + time + timeSlicer;
