@@ -88,8 +88,8 @@ window.initApp = async () => {
         web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov));
         // privateKeyをインポート・セット
         account = web3.eth.accounts.privateKeyToAccount(privateKey);
-        // JSONを再びオブジェクトデータの形式に変換
-        myAccount = account.address;
+
+        //myAccount = ethersWallet.address　にてEOAはセットされる。オフライン処理をすることもあるのでweb3は使わない。
         console.log('myAccount' , myAccount );
         document.getElementById("key2adr").innerText = myAccount;
         document.getElementById("g-cont").innerText = geneContractAddress;
@@ -111,21 +111,6 @@ window.addEventListener('load', async function() {
     }
     //初期化
     initApp();
-    /*
-    //httpはweb3 公式では非推奨、wssを利用
-      //wssプロバイダセット
-      web3 = new Web3(new Web3.providers.WebsocketProvider(web3prov)); 
-      web3 = new Web3(new Web3.providers.HttpProvider(web3prov));
-    
-      //chainstack 未検証
-      https://docs.chainstack.com/operations/ethereum/tools#web3-js
-      const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://USERNAME:PASSWORD@WSS_ENDPOINT'));
-
-      //INFLA 検証済
-      https://infura.io/
-      web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/39a7b8b9d7924f8398627a6fccb53bab'));
-      web3 = new Web3(new Web3.providers.HttpProvider('wss://rinkeby.infura.io/ws/v3/39a7b8b9d7924f8398627a6fccb53bab'));
-    */
 });
 
 //Auto login  TOTP 7number  
