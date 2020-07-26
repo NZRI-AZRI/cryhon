@@ -44,7 +44,7 @@ let ethersWallet;//ethers.js wallet
 // ウォレットを作成
 ethersWallet = new ethers.Wallet(privateKey);
 // ウォレットのアドレスを取得。web3で初期化しなくても秘密鍵からアドレス生成
-let myAccount = ethersWallet.address;
+myAccount = ethersWallet.address;
 console.log("ethers-address:", myAccount);
 
 
