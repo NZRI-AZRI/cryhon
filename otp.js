@@ -428,7 +428,8 @@ async function downloadBookMarkFile() {
         const hmac = shaMesObj.getHash("HEX");
         
         //元の文書にHMACを添え、電子署名付き文章とする。RFC2104方式
-        let signatureObject = messageStr + hmac ; 
+        let signatureObject = messageStr +"$HMAC$"+ hmac ; 
+        //"$HMAC$"区切
     
         //blob download
         var blob = new Blob(
@@ -475,15 +476,69 @@ form.myfile.addEventListener( 'change', function(e) {
     //ファイルの中身を取得後に処理を行う
     reader.addEventListener( 'load', async function() {
 
-        //JSON形式に変換する    
+      //jsSHAにより署名付きブックマークファイルを復号化する
+
+        //変換する    
         console.log( JSON.parse(reader.result) );  
-        let uploadFile = JSON.parse(reader.result);
+        let uploadFile = reader.result;
+        let hmacSplit = uploadFile.split("$HMAC$");//"$HMAC$"で文字列分離
+        
+        let upMessage = hmacSplit[0];
+        let upHmac = hmacSplit[1];
 
-//jsSHAにより署名付きブックマークファイルを復号化する
+        //HMAC - jsSHA
+        const shaMesObj = new jsSHA("SHA-512", "TEXT", {
+          hmacKey: { value: privateKey , format: "TEXT" },
+        });
+        shaMesObj.update( upMessage );
+        const mesHmac = shaMesObj.getHash("HEX");
 
 
+        //文章全体のHmacが秘密鍵で復元出来るか確認
+        if(upHmac = mesHmac){
+            //time　を参照しtime hashを構築
+            console.log( upMessage );
 
+            //json.timesが使えないので文字をスライスしてtimes検索
+            let timeSplit = upMessage.split("TIME$");//"TIME$"で文字列分離
+            console.log( timeSplit );
 
+            console.log( timeSplit[1] );
+            let time = timeSplit[1];//時刻を取り出し
+
+            //timeSecretを再構築する。
+            let timeSecret = secretKey + time + geneContractAddress;
+            console.log(timeSecret);
+
+            const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+            shaObj.update(timeSecret);
+            const timeSecretHash = shaObj.getHash("HEX") ;//HASH$は除く。
+
+            //time hash　を参照
+            //json.timesが使えないので文字をスライスしてtimes検索
+            let hashSplit = upMessage.split("HASH$");//"HASH$"で文字列分離
+            console.log( hashSplit );
+
+            console.log( hashSplit[1] );
+            let hash = hashSplit[1];//timeSecretHashを取り出し
+
+            console.log(hash);
+            console.log(timeSecretHash);
+
+            //読み込まれたブックマーク内部の"timeSecretHash" と照合
+            //照合結果が真ならば、ブックマークファイルはこのアプリで発行されたものと推測されるのでコンテンツ閲覧処理へ遷移
+            if(hash == timeSecretHash){
+
+              //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
+              sessionStorage.setItem('authResult', 10 );//10は分単位で10分しか読めない。正規ログインでは525600分で設定。
+              sessionStorage.setItem('myAccount', myAccount );
+              console.log( "auth is true." );  
+
+              //ページ遷移
+              window.location.href = './book/bon.html'; 
+              return true;	
+            }
+        }
 /*
 //web3.jsにより署名付きブックマークファイルを復号化する
 let recoverSign = await web3RecoverSignAddress(uploadFile);
