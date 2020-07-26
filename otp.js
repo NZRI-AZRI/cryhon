@@ -389,7 +389,7 @@ async function downloadBookMarkFile() {
         var jsondata = {
             //contents viewer data
             "times"              : times, //unixTime of makingBookmarkFile
-            "timeSecretHash"     : timeSecretHash // ブックマークがアプリで発行されたものか検証するデータ
+            "timeSecretHash"     : timeSecretHash, // ブックマークがアプリで発行されたものか検証するデータ
             "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
             "pageNumber"         : pageNumber,        
             "userName"           : userName,
@@ -403,7 +403,7 @@ async function downloadBookMarkFile() {
             //auth block chain - contract data
             "contractName"       : contractName, 
             "netId"              : netId,//network data    
-            "blockNumber"        : bn, //time data
+            "blockNumber"        : bn //time data
 
         }
 
