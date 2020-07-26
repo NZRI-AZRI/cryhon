@@ -537,7 +537,7 @@ form.myfile.addEventListener( 'change', function(e) {
           console.log( hashSplit );
 
           console.log( hashSplit[1] );
-          let hash = timeSplit[1];//timeSecretHashを取り出し
+          let hash = hashSplit[1];//timeSecretHashを取り出し
 
           console.log(hash);
             //読み込まれたブックマーク内部の"timeSecretHash" と照合
