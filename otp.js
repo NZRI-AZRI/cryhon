@@ -23,30 +23,42 @@
 let privateKey= sessionStorage.getItem('privateKey@');
 let web3prov = sessionStorage.getItem('prov');
 
+
+//ブックマークファイルHMAC鍵。デフォルトでは秘密鍵だが、ユーザーにパスワードや4桁のPINコードを入力させてそれを鍵にしてもいい。
+let bmhmacKey;
+//document.getElementById("hogehoge").innerText = bmhmacKey;//HTML中の入力要素に入力されたユーザーのキーを読み取り代入
+bmhmacKey = privateKey;
+
+//! USE  ethers.js
+// ウォレットを作成
+let ethers;
+
+let wallet;//eth wallet 
+wallet = new ethers.Wallet(privateKey);
+
+// ウォレットのアドレスを取得。web3で初期化しなくても秘密鍵からアドレス生成
+let myAccount;//eth address
+myAccount = wallet.address;
+console.log("ethers-address:", myAccount);
+
+let publicKey = wallet.publicKey;
+console.log("public-key:", publicKey);
+
+
+
 //コンテンツ
 //コンテンツ固有の秘密シード値の例
 const secretKey = "Cryhonbon:0x0723";
 
 //rinkeby contract
+// ブロックチェーンにデプロイしたスマートコントラクトのアドレス 固定。
 const geneContractAddress = "0x300bEDdBf16F121F7A8D8572cA83b4ec6aA483F1";
 const authContractAddress = "0x1Ed13902e42592f8a3631793D39B74e48aA6D558";
-// ブロックチェーンにデプロイしたスマートコントラクトのアドレス 固定。
-//setページで記入させてもいいし、固定してバイナリ化して実行ファイル化してもいい。
-//setで変えられるときは汎用性は上がるが誤ったコントラクトアドレスを記入する恐れも出る。
-//仮に小説本を出すとすると、コントラクトアドレスは変わりないので以下の様に固定していいハズ。
-//もしコンテンツの定性をするなら実行ファイルのverを変えるかアプリとコントラクトアドレスごと変えてしまえばいい。
 
+
+//!USE web3.js
 let web3;
 let account ;//coinbase
-let myAccount;//eth address
-
-let ethersWallet;//ethers.js wallet 
-// ウォレットを作成
-ethersWallet = new ethers.Wallet(privateKey);
-// ウォレットのアドレスを取得。web3で初期化しなくても秘密鍵からアドレス生成
-myAccount = ethersWallet.address;
-console.log("ethers-address:", myAccount);
-
 
 let nftid;
 let geneInstance; // instance
@@ -98,16 +110,22 @@ window.initApp = async () => {
         //instance
         geneInstance = new web3.eth.Contract(abigene, geneContractAddress);
         authInstance = new web3.eth.Contract(abiauth, authContractAddress);
+        
+        return true;
 };
 
 //load
 window.addEventListener('load', async function() {
     //key prov が設定されているか？
-    if (!privateKey){
-        return window.alert("key is empty")
-    }
+
     if (!web3prov){
-        return window.alert("web3prov is empty")
+      console.log('provider is empty ');
+      console.log('without block chain .without network');
+      console.log('please set your key and book mark file ');
+      return true;
+    }
+    if (!privateKey){
+      return window.alert("privateKey is empty")
     }
     //初期化
     initApp();
@@ -129,8 +147,9 @@ window.autoLoginBy7num = async () => {
 	console.log('auth Result is ', authResult);
 
 	if (authResult == true) {
-		//セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-		sessionStorage.setItem('authResult', 525600 );
+    //セッション記録
+    //trueフラグを保存。遷移先のページがあるとき、そこで使う。
+    sessionStorage.setItem('authResult', 525600 );//0以上であれば遷移できる。閲覧可能時間を示す。
     sessionStorage.setItem('myAccount'   , myAccount );
 
 		//ページ遷移
@@ -142,7 +161,7 @@ window.autoLoginBy7num = async () => {
 /** 
  * otp getter setter 
 */
-//getYourOTP   Only Owner can cahnge all OTP. 
+//getYourOTP 
 window.getOtp = async () => {
 
     //Nft Id 取得
@@ -227,13 +246,10 @@ window.getOtp = async () => {
       //入り口のページに既にコンテンツデータがロードされてしまうので、ページ遷移機能を実装。
       if (authResult == true) {
           //セッション記録
-          //sessionStorage.getItem('key') 取得
-          //sessionStorage.setItem('key', 'value');
           //trueフラグを保存。遷移先のページがあるとき、そこで使う。
-          sessionStorage.setItem('authResult', 525600 );
+          sessionStorage.setItem('authResult', 525600 );//0以上であれば遷移できる。閲覧可能時間を示す。
           sessionStorage.setItem('myAccount', myAccount );
 
-          
           //ページ遷移
           window.location.href = './book/bon.html'; 
           //window.open('./contents.html', '_blank');
@@ -299,8 +315,9 @@ window.getOtp = async () => {
       console.log('auth Result is ', authResult);
       document.getElementById("showAuthResult3").innerText = authResult;
       if (authResult == true) {
-          //セッション記録trueフラグを保存。遷移先のページがあるとき、そこで使う。
-          sessionStorage.setItem('authResult', 525600 );
+          //セッション記録
+          //trueフラグを保存。遷移先のページがあるとき、そこで使う。
+          sessionStorage.setItem('authResult', 525600 );//0以上であれば遷移できる。閲覧可能時間を示す。
           sessionStorage.setItem('myAccount', myAccount );
 
           //ページ遷移
@@ -310,13 +327,11 @@ window.getOtp = async () => {
   }
 
 
-
-
 /*
 //------------------------------------------------
 //Author
 //1.Code by NZRI. Katsuya Nishizawa.
-//2020-07-25
+//2020-07-28
 //------------------------------------------------
 */
 
@@ -379,18 +394,21 @@ async function downloadBookMarkFile() {
         console.log(timeSecretHash);
 
         var jsondata = {
+            
             //contents viewer data
             "times"              : times, //unixTime of makingBookmarkFile
             "timeSecretHash"     : timeSecretHash, // ブックマークがアプリで発行されたものか検証するデータ
             "contentsKey"        : contentsKey, //コンテンツID　ISBNなど本のIDも可能
-            "pageNumber"         : pageNumber,        
-            "userName"           : userName,
-            "userComment"        : userComment,
-            "note"               : note,
+            //"pageNumber"         : pageNumber,        
+            //"userName"           : userName,
+            //"userComment"        : userComment,//ユーザーコメントに区切り文字が入るとバグが起きるのでこの部分は除去
+            //"note"               : note, 
+            
             //auth totp data
             "user-eoa-address"   : myAccount,
             "nft-id"             : nftid, 
             "TOTP-7digit"        : totp7,     
+            
             //auth block chain - contract data
             "contractName"       : contractName, 
             "netId"              : netId,//network data    
@@ -407,14 +425,16 @@ async function downloadBookMarkFile() {
 
         //web3で署名するとき
         /*
-        //web3はネットワークがないと動かない恐れがある。なのでローカル用のライブラリでファイルを作りたい。
-        let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
-        console.log('sign data(bookmark data) is ', signatureObject);
+        //web3はネットワークがないと動かない恐れがある。なのでローカル用のライブラリでファイルを作りたい。jsSHA etc...
+          let signatureObject = await web3.eth.accounts.sign(messageStr, privateKey);
+          console.log('sign data(bookmark data) is ', signatureObject);
         */
+
+
 
         //HMAC - jsSHAで署名するとき
         const shaMesObj = new jsSHA("SHA-512", "TEXT", {
-          hmacKey: { value: privateKey , format: "TEXT" },
+          hmacKey: { value: bmhmacKey , format: "TEXT" },
         });
         shaMesObj.update(messageStr);
         const hmac = shaMesObj.getHash("HEX");
@@ -480,7 +500,7 @@ form.myfile.addEventListener( 'change', function(e) {
 
         //HMAC - jsSHA
         const shaMesObj = new jsSHA("SHA-512", "TEXT", {
-          hmacKey: { value: privateKey , format: "TEXT" },
+          hmacKey: { value: bmhmacKey , format: "TEXT" },
         });
         shaMesObj.update( upMessage );
         const mesHmac = shaMesObj.getHash("HEX");
