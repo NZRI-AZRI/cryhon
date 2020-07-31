@@ -1,6 +1,6 @@
 Copyright (c) 2020 Katsuya Nishizawa
 
-2020-07-23 (2020年7月23日改訂)
+2020-07-23 (2020年7月31日改訂)
 
 =====================================
 Main site is https://github.com/NZRI-AZRI/cryhon
@@ -28,5 +28,12 @@ The copyright of the code belongs to Katsuya Nishizawa.
 The copyright of the external Javascript module used is owned by each developer.
 (また使用している外部Javascriptモジュールの著作権はそれぞれの開発者に帰属しています。)
 
-2020-07-24
+＜コードがフリーソフトではない理由＞
+フリーソフトにしない理由はこのソフトウェアが悪用されないようにするためです。秘密裏に暗号化された万人に好ましくない内容の本のファイルがばらまかれ、無法地帯になることが無いよう、利用に制限をかけます。（このアプリの形式で製本する際にゲームにおける日本のCEROのようなレーティング団体が必要だと考えています。）
+
+筆者はイーサリアム、Solidity言語、そしてweb3.jsなどのGPLライセンスやMITライセンスの精神に支えられた外部モジュールを駆使してこのソフトウェアを開発すること出来ていますが、出来上がったソフトウェアの用途と可能性を踏まえ、利用を制限させていただきます。このソフトウェアの商用及び個人での利用を禁じます。
+
+2020-07-31
 Katsuya Nishizawa
+
+
